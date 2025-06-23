@@ -1,44 +1,105 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!-- 상단 메인 헤더 -->
-<div class="main-header" style="min-width:1200px; border-bottom:1px solid #222;">
-  <!-- 로고 -->
-  <div>
-  <a href="/" class="logo" aria-label="카카오페이지 홈으로 이동" style="margin-right:36px;">
-    <img src="https://page.kakao.com/29.6/public/images/img_logo_bi_text_l_dark.svg"
-         alt="카카오페이지 로고" width="96" height="24" />
-  </a><a href="/book">책</a>
-  <!-- 네비게이션: '책'만 -->
-  </div>
-  
-      <a href="/login" style="color:#fff; font-size:1.13em; text-decoration:none; font-weight:bold; display:flex; align-items:center;">
-      <span>내 정보</span>
-        <svg width="18" height="18" fill="#888" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="7" stroke="#888" stroke-width="2" fill="none"/>
-          <line x1="17" y1="17" x2="22" y2="22" stroke="#888" stroke-width="2"/>
-        </svg>
-    </a>
-    
 
-  <!-- 검색창 & 내정보(로그인) -->
-  <div class="search-user">
-    <form action="/search" method="get" class="search-form" style="margin-right:18px;">
-      <input type="text" name="q" class="search-input" placeholder="작품, 작가를 검색하세요" />
-      <button type="submit" class="search-btn" aria-label="검색">
-        <svg width="18" height="18" fill="#888" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="7" stroke="#888" stroke-width="2" fill="none"/>
-          <line x1="17" y1="17" x2="22" y2="22" stroke="#888" stroke-width="2"/>
-        </svg>
-      </button>
-    </form>
+<!-- ✅ 상단 메인 헤더: 로고, 책, 검색, 로그인/회원가입 구성 -->
+<header style="display: flex;
+			   align-items: center;
+			   justify-content: space-between;
+			   padding: 20px 40px;
+			   background-color: #ffffff;
+			   border-bottom: 1px solid #ddd;
+			   font-family: 'Pretendard', sans-serif;
+			   font-size: 16px;">
 
-  </div>
-</div>
-<!-- 하위 탭 네비게이션 -->
-<div style="background:#191919; border-bottom:1px solid #222;">
-  <div style="max-width:1200px; margin:0 auto; padding:0 30px; display:flex; gap:22px; height:48px; align-items:center;">
-    <a href="/hot" class="tab" style="color:#fff; font-weight:500; font-size:1.07em; text-decoration:none;">지금 핫한</a>
-    <a href="/ranking" class="tab" style="color:#fff; font-weight:500; font-size:1.07em; text-decoration:none;">실시간 랭킹</a>
-    <a href="/book" class="tab" style="color:#fff; font-weight:500; font-size:1.07em; text-decoration:none;">책</a>
-  </div>
-</div>
+	<!-- 왼쪽 영역: 로고 + 책 메뉴 -->
+	<div style="display: flex; align-items: center; gap: 30px;">
+		<!-- ✅ 로고 클릭 시 home.jsp로 이동 -->
+		<a href="${pageContext.request.contextPath}/home" style="display: flex; align-items: center;">
+			<img src="${pageContext.request.contextPath}/resources/image/cat.jfif"
+			     alt="로고"
+			     style="width: 120px; height: auto;">
+		</a>
+
+		<!-- 책 메뉴 -->
+		<a href="${pageContext.request.contextPath}/book"
+		   style="text-decoration: none; color: #333; font-weight: 500;">
+			책
+		</a>
+	</div>
+
+	<!-- 가운데 영역: 검색 입력창 -->
+	<div style="flex-grow: 1; text-align: center;">
+		<form action="${pageContext.request.contextPath}/search" method="get" style="display: inline-block;">
+			<input type="text" name="keyword"
+			       placeholder="제목, 작가명으로 검색"
+			       style="width: 320px;
+						  padding: 10px 15px;
+						  border: 1px solid #ccc;
+						  border-radius: 25px;
+						  background-color: #f8f8f8;
+						  font-size: 15px;">
+			<button type="submit"
+			        style="margin-left: 8px;
+						   padding: 10px 18px;
+						   background-color: #ffeb00;
+						   border: none;
+						   border-radius: 25px;
+						   font-weight: 600;
+						   cursor: pointer;">
+				검색
+			</button>
+		</form>
+	</div>
+
+	<!-- 오른쪽 영역: 로그인 / 회원가입 -->
+	<div style="display: flex; gap: 20px;">
+		<a href="${pageContext.request.contextPath}/login"
+		   style="text-decoration: none; color: #555; font-weight: 400;">
+			로그인
+		</a>
+		<a href="${pageContext.request.contextPath}/signup"
+		   style="text-decoration: none; color: #555; font-weight: 400;">
+			회원가입
+		</a>
+	</div>
+</header>
+
+<!-- ✅ 하위 탭 네비게이션 (카카오페이지 스타일 통일 적용) -->
+<nav style="background-color: #191919; border-bottom: 1px solid #222;">
+	<div style="max-width: 1200px;
+				margin: 0 auto;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				gap: 30px;
+				padding: 0 40px;
+				height: 48px;">
+
+		<a href="${pageContext.request.contextPath}/hot"
+		   style="color: #ffffff;
+				  font-weight: 500;
+				  font-size: 16px;
+				  text-decoration: none;
+				  font-family: 'Pretendard', sans-serif;">
+			지금 핫한
+		</a>
+
+		<a href="${pageContext.request.contextPath}/ranking"
+		   style="color: #ffffff;
+				  font-weight: 500;
+				  font-size: 16px;
+				  text-decoration: none;
+				  font-family: 'Pretendard', sans-serif;">
+			실시간 랭킹
+		</a>
+
+		<a href="${pageContext.request.contextPath}/book"
+		   style="color: #ffffff;
+				  font-weight: 500;
+				  font-size: 16px;
+				  text-decoration: none;
+				  font-family: 'Pretendard', sans-serif;">
+			책
+		</a>
+	</div>
+</nav>
