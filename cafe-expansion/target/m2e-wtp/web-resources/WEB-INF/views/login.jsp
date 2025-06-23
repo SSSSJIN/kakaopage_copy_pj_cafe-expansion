@@ -1,0 +1,56 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>카카오페이지 로그인</title>
+    <style>
+        body { font-family: 'Malgun Gothic', Arial, sans-serif; background: #f8f8f8; }
+        .login-container { width: 350px; margin: 80px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 35px 30px; }
+        .login-title { text-align: center; font-size: 1.8em; margin-bottom: 30px; color: #333; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 5px; color: #555; }
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 9px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em;
+        }
+        .login-btn {
+            width: 100%; background: #ffeb00; color: #3a1d1d; border: none; border-radius: 5px;
+            padding: 10px 0; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
+        .kakao-btn {
+            width: 100%; background: #fee500; color: #191600; border: none; border-radius: 5px;
+            padding: 10px 0; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .kakao-btn img { height: 22px; margin-right: 8px; }
+        .signup-link { text-align: right; margin-top: 15px; }
+        .signup-link a { color: #3a1d1d; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-title">카카오페이지 로그인</div>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="username">아이디</label>
+                <input type="text" id="username" name="username" placeholder="아이디 입력" required />
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호 입력" required />
+            </div>
+            <button type="submit" class="login-btn">로그인</button>
+        </form>
+        <form action="/kakao-login" method="get">
+            <button type="submit" class="kakao-btn">
+                <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" alt="카카오 로고" />
+                카카오계정으로 로그인
+            </button>
+        </form>
+        <div class="signup-link">
+            <a href="/signup">회원가입</a>
+        </div>
+    </div>
+</body>
+</html>

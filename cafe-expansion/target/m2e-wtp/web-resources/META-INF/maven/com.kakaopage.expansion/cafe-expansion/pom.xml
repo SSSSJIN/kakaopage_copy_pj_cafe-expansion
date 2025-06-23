@@ -5,7 +5,6 @@
            https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>com.kakaopage.expansion</groupId>
   <artifactId>cafe-expansion</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -125,68 +124,79 @@
 
     <!-- Bean Validation -->
     <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+    <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>9.0.0.Final</version>
     </dependency>
-
-    <!-- Jakarta Expression Language -->
     <dependency>
       <groupId>jakarta.el</groupId>
       <artifactId>jakarta.el-api</artifactId>
       <version>6.0.1</version>
     </dependency>
 
-    <!-- Test -->
+    <!-- === Test Dependencies === -->
+
+    <!-- JUnit 5 -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.9.2</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- Spring Test (MockMvc, WebApplicationContext 등) -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>6.2.7</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- Mockito + JUnit5 연동 -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.2.0</version>
+      <scope>test</scope>
+    </dependency>
+
+	<!-- AssertJ Core (Fluent Assertion) -->
+	<dependency>
+		<groupId>org.assertj</groupId>
+		<artifactId>assertj-core</artifactId>
+		<version>3.24.2</version>
+		<scope>test</scope>
+	</dependency>
+
   </dependencies>
 
   <build>
-    <finalName>cafe-expansion</finalName>
-    <pluginManagement>
-      <!-- 기존에 사용 중이신 pluginManagement는 그대로 유지 -->
-      <plugins>
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.4.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.3.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.13.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.3.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>3.4.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.1.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.2</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+  <finalName>cafe-expansion</finalName>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>3.4.0</version>
+      <configuration>
+        <webResources>
+          <resource>
+            <directory>src/main/webapp</directory>
+            <includes>
+              <include>**/*.jsp</include>
+              <include>**/*.css</include>
+              <include>**/*.js</include>
+              <include>**/*.svg</include>
+            </includes>
+          </resource>
+        </webResources>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
 
 </project>

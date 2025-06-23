@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans 
+           https://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context 
+           https://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/mvc 
+           https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+  <!-- 1) 컨트롤러 스캔 -->
+  <context:component-scan base-package="com.kakaopage.expansion.controller"/>
+
+  <!-- 2) Annotation 기반 MVC 기능 활성화 -->
+  <mvc:annotation-driven/>
+
+  <!-- 0) 컨텍스트 루트 요청을 index.jsp 로 매핑 -->
+  <mvc:view-controller path="/" view-name="index"/>
+
+  <!-- 3) 정적 리소스(css/js/images) 및 JSP를 톰캣 기본(Default) 핸들러에 위임 -->
+  <mvc:default-servlet-handler/>
+
+  <!-- 4) 뷰 리졸버 -->
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/views/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>
+
+</beans>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
@@ -10,6 +11,8 @@
            https://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/context
            https://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/mvc
+           https://www.springframework.org/schema/mvc/spring-mvc.xsd
          http://www.springframework.org/schema/tx
            https://www.springframework.org/schema/tx/spring-tx.xsd
          http://www.springframework.org/schema/security
@@ -17,65 +20,55 @@
          http://mybatis.org/schema/mybatis-spring
            http://mybatis.org/schema/mybatis-spring-1.3.xsd">
 
-  <!-- 1) 컴포넌트 스캔 -->
-  <context:component-scan base-package="com.kakaopage.expansion"/>
+  <!-- 1) 컴포넌트 스캔 (Service, DAO) -->
+  <context:component-scan base-package="com.kakaopage.expansion.service,
+                                            com.kakaopage.expansion.dao"/>
 
-  <!-- 2) 뷰 리졸버 -->
-  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="prefix" value="/WEB-INF/views/"/>
-    <property name="suffix" value=".jsp"/>
-  </bean>
+  <!-- 2) 정적 리소스 매핑 -->
+  <mvc:resources mapping="/resources/**" location="/resources/"/>
 
   <!-- 3) DataSource + JdbcTemplate 설정 -->
   <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
     <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
     <property name="url"             value="jdbc:oracle:thin:@localhost:1521:xe"/>
-    <property name="username"        value="ebook"/>
-    <property name="password"        value="ebook1234"/>
+    <property name="username"        value="hr"/>
+    <property name="password"        value="hr"/>
     <property name="initialSize"     value="5"/>
-    <property name="maxTotal"        value="20"/>
+    <property name="maxActive"       value="20"/>
   </bean>
 
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
     <constructor-arg ref="dataSource"/>
   </bean>
 
-  <!-- 4) MyBatis SqlSessionFactory & Mapper 스캔 -->
+  <!-- 4) MyBatis 설정 -->
   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
     <property name="dataSource" ref="dataSource"/>
-    <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+    <property name="mapperLocations"
+              value="classpath:mybatis/mapper/*.xml"/>
   </bean>
-
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-    <property name="basePackage" value="com.kakaopage.expansion.dao"/>
+    <property name="basePackage"
+              value="com.kakaopage.expansion.dao"/>
   </bean>
 
-  <!-- 5) 트랜잭션 매니저 활성화 -->
-  <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <!-- 5) 트랜잭션 매니저 정의 -->
+  <bean id="txManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
+  <!-- 6) 어노테이션 기반 트랜잭션 활성화 -->
   <tx:annotation-driven transaction-manager="txManager"/>
 
-  <!-- 6) JSON 처리용 Jackson 메시지 컨버터 -->
+  <!-- 7) JSON 메시지 컨버터 -->
   <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
 
-  <!-- 7) Spring Security 설정 -->
+  <!-- 8) (선택) Spring Security 설정 주석 처리 -->
+  <!--
   <security:http use-expressions="true">
-    <!-- 로그인 페이지 공개 -->
-    <security:form-login
-      login-page="/login"
-      default-target-url="/home"
-      authentication-failure-url="/login?error"/>
-    <!-- 로그아웃 처리 -->
-    <security:logout
-      logout-url="/logout"
-      logout-success-url="/login?logout"/>
-    <!-- 정적 리소스는 모두 공개 -->
-    <security:intercept-url pattern="/css/**" access="permitAll"/>
-    <security:intercept-url pattern="/js/**" access="permitAll"/>
-    <!-- 그 외 모든 요청은 인증된 사용자만 -->
-    <security:intercept-url pattern="/**" access="isAuthenticated()"/>
+    ...
   </security:http>
+  -->
 
 </beans>

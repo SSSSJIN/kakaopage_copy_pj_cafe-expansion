@@ -1,0 +1,113 @@
+:root {
+  --black: #000;
+  --white: #fff;
+  --yellow: #ffc600;
+  --gray-bg: #111;
+  --gray-text: #888;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  background-color: var(--black);
+  color: var(--white);
+}
+
+/* 1) 헤더: 로고 · 책 링크 · 검색창 · 회원가입 아이콘 한 줄 */
+.header {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 24px;
+  padding: 16px 32px;
+  background: var(--black);
+}
+.logo {
+  width: 120px;
+  height: auto;
+}
+.book-link {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search input {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  width: 200px;
+}
+.search button {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.signup-icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+/* 2) 탭 */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  background: var(--gray-bg);
+  padding: 12px 0;
+}
+.tab {
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: transparent;
+  border: none;
+  color: var(--gray-text);
+  cursor: pointer;
+  font-size: 1rem;
+}
+.tab-active {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+/* 3) 섹션 제목 (최근 본 책 등) */
+.section-title {
+  font-size: 1.2rem;
+  color: var(--white);
+  padding: 24px 32px 8px;
+}
+
+/* 4) 책 목록 그리드 (최근 본 / 지금핫한 / 실시간랭킹) */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  padding: 24px 32px;
+}
+.book-item img {
+  width: 100%;
+  border-radius: 4px;
+  display: block;
+}
+
+/* 5) 푸터 */
+.footer {
+  text-align: center;
+  padding: 24px;
+  background: var(--gray-bg);
+  color: var(--gray-text);
+  font-size: 0.8rem;
+}

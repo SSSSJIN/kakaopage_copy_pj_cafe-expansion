@@ -1,3 +1,9 @@
 eclipse.preferences.version=1
-encoding//src/main/webapp/WEB-INF/views/commentList.jsp=UTF-8
+encoding//src/main/java=UTF-8
+encoding//src/main/webapp/WEB-INF/views/boardDetail.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/boardForm.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/boardList.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/common/commentList.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/common/recentBooks.jsp=UTF-8
+encoding//src/test/java=UTF-8
 encoding/<project>=UTF-8

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakaopage.expansion.dao.BookMapper">
+
+  <!-- 공통 resultMap -->
+  <resultMap id="BookResult" type="com.kakaopage.expansion.vo.BookVO">
+    <id     property="id"          column="ID"/>
+    <result property="title"       column="TITLE"/>
+    <result property="episode"     column="EPISODE"/>
+    <result property="author"      column="AUTHOR"/>
+    <result property="description" column="DESCRIPTION"/>
+    <result property="image"       column="IMAGE"/>
+    <result property="regdate"     column="REGDATE"/>
+    <result property="category"    column="CATEGORY"/>
+  </resultMap>
+
+  <!-- 1) getMainContents() -->
+  <select id="getMainContents" resultMap="BookResult">
+    SELECT ID, TITLE, EPISODE, AUTHOR, DESCRIPTION, IMAGE, REGDATE, CATEGORY
+      FROM BOOK
+     WHERE CATEGORY = 'HOT'
+     ORDER BY REGDATE DESC
+     FETCH FIRST 10 ROWS ONLY
+  </select>
+
+  <!-- 2) getRanking() -->
+  <select id="getRanking" resultMap="BookResult">
+    SELECT ID, TITLE, EPISODE, AUTHOR, DESCRIPTION, IMAGE, REGDATE, CATEGORY
+      FROM BOOK
+     WHERE CATEGORY = 'RANKING'
+     ORDER BY REGDATE DESC
+     FETCH FIRST 10 ROWS ONLY
+  </select>
+
+  <!-- 3) getRecentBooks(Long) -->
+  <select id="getRecentBooks" parameterType="long" resultMap="BookResult">
+    SELECT b.ID, b.TITLE, b.EPISODE, b.AUTHOR, b.DESCRIPTION, b.IMAGE, b.REGDATE, b.CATEGORY
+      FROM BOOK b
+      JOIN RECENT_VIEW rv ON b.ID = rv.BOOK_ID
+     WHERE rv.USER_ID = #{userId}
+     ORDER BY rv.VIEW_DATE DESC
+     FETCH FIRST 10 ROWS ONLY
+  </select>
+
+  <!-- 4) selectAll() -->
+  <select id="selectAll" resultMap="BookResult">
+    SELECT ID, TITLE, EPISODE, AUTHOR, DESCRIPTION, IMAGE, REGDATE, CATEGORY
+      FROM BOOK
+     ORDER BY REGDATE DESC
+  </select>
+
+  <!-- 5) selectById(Long) -->
+  <select id="selectById" parameterType="long" resultMap="BookResult">
+    SELECT ID, TITLE, EPISODE, AUTHOR, DESCRIPTION, IMAGE, REGDATE, CATEGORY
+      FROM BOOK
+     WHERE ID = #{id}
+  </select>
+
+  <!-- 6) selectByTitle(String) -->
+  <select id="selectByTitle" parameterType="string" resultMap="BookResult">
+    SELECT ID, TITLE, EPISODE, AUTHOR, DESCRIPTION, IMAGE, REGDATE, CATEGORY
+      FROM BOOK
+     WHERE TITLE LIKE '%' || #{title} || '%'
+     ORDER BY REGDATE DESC
+  </select>
+
+  <!-- 7) insert(BookVO) -->
+  <insert id="insert" parameterType="com.kakaopage.expansion.vo.BookVO">
+    INSERT INTO BOOK (TITLE, EPISODE, AUTHOR, DESCRIPTION, IMAGE, CATEGORY, REGDATE)
+    VALUES (#{title}, #{episode}, #{author}, #{description}, #{image}, #{category}, #{regdate})
+  </insert>
+
+</mapper>
