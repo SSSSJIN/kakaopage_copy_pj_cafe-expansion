@@ -45,7 +45,7 @@
     </c:if>
 
     <div class="login-container">
-        <div class="login-title">페이지 로그인</div>
+        <div class="login-title">kakao</div>
         <!-- [수정] action에 컨텍스트 경로 적용 -->
         <form action="<c:url value='/login'/>" method="post">
             <div class="form-group">
