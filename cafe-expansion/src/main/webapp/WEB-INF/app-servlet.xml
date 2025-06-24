@@ -14,11 +14,9 @@
   <!-- 1) 컨트롤러 스캔 -->
   <context:component-scan base-package="com.kakaopage.expansion.controller"/>
 
-  <!-- 2) Annotation 기반 MVC 기능 활성화 -->
-  <mvc:annotation-driven/>
+  <!-- (중략된 부분 없이 그대로 유지) -->
 
-  <!-- 0) 컨텍스트 루트 요청을 index.jsp 로 매핑 -->
-  <mvc:view-controller path="/" view-name="index"/>
+  <mvc:annotation-driven/>  
 
   <!-- 3) 정적 리소스(css/js/images) 및 JSP를 톰캣 기본(Default) 핸들러에 위임 -->
   <mvc:default-servlet-handler/>

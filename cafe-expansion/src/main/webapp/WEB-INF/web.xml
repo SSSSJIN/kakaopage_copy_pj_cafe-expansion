@@ -23,7 +23,7 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-  <!-- 2) Root ApplicationContext (Service, Repository 등) -->
+  <!-- 2) ContextLoaderListener: Root Application Context 설정 -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/app-context.xml</param-value>
@@ -32,7 +32,7 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-  <!-- 3) Spring MVC DispatcherServlet 설정 -->
+  <!-- 3) DispatcherServlet 설정 -->
   <servlet>
     <servlet-name>app</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -47,8 +47,9 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
-  <!-- 4) 애플리케이션 루트("/")로 접근 시 index.jsp를 첫 화면으로 사용 -->
   <welcome-file-list>
+    <!-- [수정] 루트 요청 시 /home 매핑으로 포워드 -->
+    <welcome-file>home</welcome-file>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 

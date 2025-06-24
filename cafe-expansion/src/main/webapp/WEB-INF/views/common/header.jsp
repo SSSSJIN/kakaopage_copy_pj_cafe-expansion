@@ -15,7 +15,7 @@
 	<div style="display: flex; align-items: center; gap: 30px;">
 		<!-- ✅ 로고 클릭 시 home.jsp로 이동 -->
 		<a href="${pageContext.request.contextPath}/home" style="display: flex; align-items: center;">
-			<img src="${pageContext.request.contextPath}/resources/image/cat.jfif"
+			<img src="${pageContext.request.contextPath}/resources/image/cat.png"
 			     alt="로고"
 			     style="width: 120px; height: auto;">
 		</a>
