@@ -1,45 +1,43 @@
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakaopage.expansion.dao.EventMapper">
 
-<div class="container mx-auto px-122pxr">
-  <!-- 게시글 제목/메타 -->
-  <h2 class="font-medium2 text-el-60 mb-16pxr">${board.title}</h2>
-  <p class="text-el-50 mb-16pxr">
-    작성자: ${board.writer} | 등록일: ${board.regDate}
-  </p>
+  <resultMap id="EventResult" type="com.kakaopage.expansion.vo.EventVO">
+    <id     property="id"        column="ID"/>
+    <result property="title"     column="TITLE"/>
+    <result property="imageUrl"  column="IMAGE_URL"/>
+    <result property="linkUrl"   column="LINK_URL"/>
+    <result property="startDate" column="START_DATE"/>
+    <result property="endDate"   column="END_DATE"/>
+  </resultMap>
 
-  <!-- 게시글 내용 -->
-  <div class="rounded-8pxr bg-s-gray-20/15 p-16pxr mb-24pxr">
-    ${board.content}
-  </div>
+  <!-- 활성화된 이벤트 조회 -->
+  <select id="selectActiveEvents" resultMap="EventResult">
+    SELECT
+      ID,
+      TITLE,
+      IMAGE_URL,
+      LINK_URL,
+      START_DATE,
+      END_DATE
+    FROM EVENT
+    WHERE SYSDATE BETWEEN START_DATE AND END_DATE
+    ORDER BY START_DATE
+  </select>
 
-  <!-- 수정·삭제·목록 -->
-  <div class="flex items-center space-x-16pxr mb-32pxr">
-    <a href="<c:url value='/boards/${board.id}/edit'/>"
-       class="font-medium1 cursor-pointer text-el-60">
-      수정
-    </a>
-    <form action="<c:url value='/boards/${board.id}/delete'/>"
-          method="post"
-          style="display:inline">
-      <button type="submit"
-              class="font-medium1 cursor-pointer text-el-60"
-              onclick="return confirm('정말 삭제하시겠습니까?')">
-        삭제
-      </button>
-    </form>
-    <a href="<c:url value='/boards'/>"
-       class="font-medium1 cursor-pointer text-el-60">
-      목록으로
-    </a>
-  </div>
+  <!-- 단일 이벤트 조회 -->
+  <select id="selectEventById" parameterType="long" resultMap="EventResult">
+    SELECT
+      ID,
+      TITLE,
+      IMAGE_URL,
+      LINK_URL,
+      START_DATE,
+      END_DATE
+    FROM EVENT
+    WHERE ID = #{id}
+  </select>
 
-  <!-- 댓글 목록/작성 폼 -->
-  <jsp:include page="commentList.jsp">
-    <jsp:param name="comments" value="${comments}" />
-  </jsp:include>
-  <jsp:include page="commentForm.jsp">
-    <jsp:param name="board.id" value="${board.id}" />
-  </jsp:include>
-</div>
-
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+</mapper>

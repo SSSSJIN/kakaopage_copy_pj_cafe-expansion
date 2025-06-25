@@ -4,36 +4,27 @@ import java.util.List;
 import com.kakaopage.expansion.vo.BookVO;
 
 public interface BookService {
-    List<BookVO> getMainContents();           // 지금 핫한
-    List<BookVO> getRanking();                // 실시간 랭킹
-    List<BookVO> getRecentBooks(Long userId); // 최근 본 책
+    /** 메인화면 “지금 핫한” */
+    List<BookVO> getHotBooks();
 
-    // (필요에 따라 기존 CRUD 메서드도 추가)
+    /** 메인화면 “실시간 랭킹” */
+    List<BookVO> getRankingBooks();
 
+    /** 최근 본 책 */
+    List<BookVO> getRecentBooks(Long userId);
 
-    /**
-     * 모든 책 조회
-     * @return DB의 BOOK 테이블 전체 리스트
-     */
-    List<BookVO> getAll();
+    /** 전체 책 조회 */
+    List<BookVO> getAllBooks();
 
-    /**
-     * 단일 책 조회
-     * @param id 책의 고유 ID
-     * @return 해당 ID의 BookVO
-     */
-    BookVO get(Long id);
+    /** 단일 책 */
+    BookVO getBookById(Long id);
 
-    /**
-     * 제목으로 책 검색
-     * @param title 검색할 제목
-     * @return 제목이 일치하는 책 리스트
-     */
-    List<BookVO> getByTitle(String title);
+    /** 제목으로 검색 */
+    List<BookVO> getBooksByTitle(String title);
 
-    /**
-     * 새 책 등록
-     * @param book 추가할 BookVO
-     */
-    void add(BookVO book);
+    /** 새 책 등록 */
+    void insertBook(BookVO book);
+
+    /** 썸네일 URL 업데이트 */
+    void updateThumbnail(Long id, String thumbnail);
 }

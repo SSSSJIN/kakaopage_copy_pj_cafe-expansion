@@ -24,8 +24,8 @@ public class DBUtil {
     public static Connection getConnection() throws SQLException {
         // URL, 계정·비번은 환경에 맞게 조정하세요.
         String url      = "jdbc:oracle:thin:@localhost:1521:xe";
-        String username = "ebook";
-        String password = "ebook1234";
+        String username = "hr";
+        String password = "hr";
         return DriverManager.getConnection(url, username, password);
     }
 

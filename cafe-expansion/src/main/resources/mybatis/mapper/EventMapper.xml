@@ -13,7 +13,7 @@
     <result property="endDate"   column="END_DATE"/>
   </resultMap>
 
-  <!-- 활성화된 이벤트 조회 -->
+  <!-- 현재 활성화된 이벤트 조회 -->
   <select id="selectActiveEvents" resultMap="EventResult">
     SELECT
       ID,
@@ -22,7 +22,7 @@
       LINK_URL,
       START_DATE,
       END_DATE
-    FROM EVENT
+    FROM hr.EVENT
     WHERE SYSDATE BETWEEN START_DATE AND END_DATE
     ORDER BY START_DATE
   </select>

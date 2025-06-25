@@ -1,4 +1,5 @@
-<%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8"
+         contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- ✅ 상단 메인 헤더: 로고, 책, 검색, 로그인/회원가입 구성 -->

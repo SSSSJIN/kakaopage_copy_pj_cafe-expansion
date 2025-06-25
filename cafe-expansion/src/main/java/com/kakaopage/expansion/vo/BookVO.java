@@ -1,34 +1,17 @@
 package com.kakaopage.expansion.vo;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class BookVO {
-    private Long      id;
-    private String    title;
-    private Integer   episode;     // 새로 추가한 필드
-    private String    author;
-    private String    description;
-    private String    image;
-    private Timestamp regdate;
-    private String    category;
-
-    public BookVO() {
-        // 기본 생성자
-    }
-
-    // 선택적으로 모든 필드를 인자로 받는 생성자도 추가할 수 있습니다.
-    public BookVO(Long id, String title, Integer episode, String author,
-                  String description, String image, Timestamp regdate,
-                  String category) {
-        this.id          = id;
-        this.title       = title;
-        this.episode     = episode;
-        this.author      = author;
-        this.description = description;
-        this.image       = image;
-        this.regdate     = regdate;
-        this.category    = category;
-    }
+    private Long id;
+    private String title;
+    private String episode;
+    private String author;
+    private String description;
+    private String image;
+    private String thumbnail;     // ← 새로 추가
+    private LocalDate regdate;
+    private String category;
 
     public Long getId() {
         return id;
@@ -44,10 +27,10 @@ public class BookVO {
         this.title = title;
     }
 
-    public Integer getEpisode() {
+    public String getEpisode() {
         return episode;
     }
-    public void setEpisode(Integer episode) {
+    public void setEpisode(String episode) {
         this.episode = episode;
     }
 
@@ -72,10 +55,17 @@ public class BookVO {
         this.image = image;
     }
 
-    public Timestamp getRegdate() {
+    public String getThumbnail() {       // ← 새로 추가
+        return thumbnail;
+    }
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public LocalDate getRegdate() {
         return regdate;
     }
-    public void setRegdate(Timestamp regdate) {
+    public void setRegdate(LocalDate regdate) {
         this.regdate = regdate;
     }
 

@@ -1,14 +1,15 @@
-<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-
-<footer class="flex bg-bg-a-10 mx-auto w-full min-w-1200pxr flex-col items-center pb-42pxr mt-84pxr">
-  <div class="flex w-956pxr flex-1 justify-center pl-15pxr">
-    <div class="mb-20pxr flex flex-1 flex-col">
-   
-     
-      <div class="mt-20pxr">
-        <span class="font-small1 text-el-40">© Cat Corp.</span>
-      </div>
-      
-    </div>
+<%@ page language="java"
+    pageEncoding="UTF-8"
+    contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<footer>
+  <div class="footer-container">
+    <p>&copy; 2025 카카오페이지 카피캣 프로젝트</p>
+    <ul class="footer-links">
+      <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+      <li><a href="${pageContext.request.contextPath}/book">Books</a></li>
+      <li><a href="${pageContext.request.contextPath}/hot">Hot</a></li>
+      <li><a href="${pageContext.request.contextPath}/ranking">Ranking</a></li>
+    </ul>
   </div>
 </footer>
