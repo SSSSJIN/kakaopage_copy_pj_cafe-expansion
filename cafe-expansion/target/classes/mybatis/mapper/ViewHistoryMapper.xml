@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakaopage.expansion.dao.ViewHistoryMapper">
+
+  <resultMap id="BookResult" type="com.kakaopage.expansion.vo.BookVO">
+    <id     property="id"        column="ID"/>
+    <result property="title"     column="TITLE"/>
+    <result property="episode"   column="EPISODE"/>
+    <result property="author"    column="AUTHOR"/>
+    <result property="description" column="DESCRIPTION"/>
+    <result property="thumbnail" column="THUMBNAIL"/>
+    <result property="viewCount" column="VIEW_COUNT"/>
+    <result property="regdate"   column="REGDATE"/>
+    <result property="category"  column="CATEGORY"/>
+  </resultMap>
+
+  <select id="selectRecentViewsByUser" parameterType="long" resultMap="BookResult">
+    SELECT b.ID, b.TITLE, b.EPISODE, b.AUTHOR, b.DESCRIPTION, b.THUMBNAIL, b.VIEW_COUNT, b.REGDATE, b.CATEGORY
+      FROM VIEW_HISTORY vh
+      JOIN BOOK b ON vh.BOOK_ID = b.ID
+     WHERE vh.USER_ID = #{userId}
+     ORDER BY vh.VIEWED_AT DESC
+  </select>
+
+</mapper>

@@ -1,37 +1,23 @@
 package com.kakaopage.expansion.dao;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import com.kakaopage.expansion.vo.UserVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.mybatis.spring.SqlSessionTemplate;
 
-@Primary
 @Repository
-public class UserDaoImpl implements UserDao {
-	private final JdbcTemplate jdbc;
+public class UserDAOImpl implements UserDAO {
+  private final SqlSessionTemplate sql;
+  @Autowired
+  public UserDAOImpl(SqlSessionTemplate sql) { this.sql = sql; }
 
-	public UserDaoImpl(JdbcTemplate jdbc) {
-		this.jdbc = jdbc;
-	}
+  @Override
+  public void insertUser(UserVO user) {
+    sql.insert("com.kakaopage.expansion.dao.UserMapper.insertUser", user);
+  }
 
-	@Override
-	public void insert(UserVO user) {
-		String sql = "INSERT INTO USERS(username, password, role) VALUES(?,?,?)";
-		jdbc.update(sql,
-			user.getUsername(),
-			user.getPassword(),
-			user.getRole()
-		);
-	}
-
-	@Override
-	public UserVO findByUsername(String username) {
-		String sql = "SELECT * FROM USERS WHERE USERNAME = ?";
-		return jdbc.queryForObject(sql,
-			new BeanPropertyRowMapper<>(UserVO.class),
-			username
-		);
-	}
+  @Override
+  public UserVO selectByEmail(String email) {
+    return sql.selectOne("com.kakaopage.expansion.dao.UserMapper.selectByEmail", email);
+  }
 }

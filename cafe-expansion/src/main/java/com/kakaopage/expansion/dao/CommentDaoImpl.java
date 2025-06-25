@@ -1,39 +1,33 @@
 package com.kakaopage.expansion.dao;
 
-import java.util.List;
-
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.kakaopage.expansion.vo.CommentVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kakaopage.expansion.vo.CommentVO;
+import java.util.List;
 
-@Primary
 @Repository
 public class CommentDaoImpl implements CommentDao {
-    private final JdbcTemplate jdbc;
 
-    public CommentDaoImpl(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
+    private final CommentMapper commentMapper;
+
+    @Autowired
+    public CommentDaoImpl(CommentMapper commentMapper) {
+        this.commentMapper = commentMapper;
     }
 
     @Override
     public List<CommentVO> selectByBoardId(Long boardId) {
-        String sql = "SELECT * FROM COMMENT WHERE BOARD_ID = ? ORDER BY REGDATE ASC";
-        return jdbc.query(sql,
-            new BeanPropertyRowMapper<>(CommentVO.class),
-            boardId
-        );
+        return commentMapper.selectByBoardId(boardId);
     }
 
     @Override
-    public void insert(CommentVO comment) {
-        String sql = "INSERT INTO COMMENT(board_id, content, writer) VALUES(?,?,?)";
-        jdbc.update(sql,
-            comment.getBoardId(),
-            comment.getContent(),
-            comment.getWriter()
-        );
+    public void insert(CommentVO vo) {
+        commentMapper.insert(vo);
+    }
+
+    @Override
+    public void delete(Long commentId) {
+        commentMapper.delete(commentId);
     }
 }

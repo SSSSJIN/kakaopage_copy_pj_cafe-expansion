@@ -1,7 +1,8 @@
 package com.kakaopage.expansion.dao;
 
-import com.kakaopage.expansion.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.kakaopage.expansion.vo.UserVO;
 
 @Mapper
 public interface UserMapper {

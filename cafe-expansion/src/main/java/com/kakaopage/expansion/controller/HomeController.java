@@ -1,40 +1,35 @@
 package com.kakaopage.expansion.controller;
 
-import java.util.List;
-
 import com.kakaopage.expansion.service.BookService;
-import com.kakaopage.expansion.service.EventService;
 import com.kakaopage.expansion.vo.BookVO;
-import com.kakaopage.expansion.vo.EventVO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 public class HomeController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     @Autowired
-    private EventService eventService;
+    public HomeController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
+    /**
+     * 메인화면: "/" 또는 "/home" 으로 접근 가능하도록 매핑
+     */
     @GetMapping({"/", "/home"})
     public String home(Model model) {
-        // 1) 지금 핫한
-        List<BookVO> hotBooks = bookService.getHotBooks();
-        model.addAttribute("hotBooks", hotBooks);
+        // “지금 핫한”과 “실시간 랭킹” 리스트
+        List<BookVO> hot     = bookService.getHotBooks();
+        List<BookVO> ranking = bookService.getRankingBooks();
 
-        // 2) 실시간 랭킹
-        List<BookVO> rankingBooks = bookService.getRankingBooks();
-        model.addAttribute("rankingBooks", rankingBooks);
-
-        // 3) 대표 이벤트
-        List<EventVO> events = eventService.getActiveEvents();
-        model.addAttribute("events", events);
-
-        return "home";
+        model.addAttribute("hotBooks",     hot);
+        model.addAttribute("rankingBooks", ranking);
+        return "home";  // /WEB-INF/views/home.jsp
     }
 }

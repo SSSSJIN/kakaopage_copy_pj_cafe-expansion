@@ -1,39 +1,33 @@
 package com.kakaopage.expansion.service;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.kakaopage.expansion.dao.UserMapper;
 import com.kakaopage.expansion.vo.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final UserMapper mapper;
 
-	private final UserMapper userMapper;
-	private final BCryptPasswordEncoder encoder;
+    @Autowired
+    public UserServiceImpl(UserMapper mapper) {
+        this.mapper = mapper;
+    }
 
-	public UserServiceImpl(UserMapper userMapper) {
-		this.userMapper = userMapper;
-		this.encoder = new BCryptPasswordEncoder();
-	}
+    @Override
+    public void register(UserVO user) {
+        // 기본 ROLE 설정
+        user.setRole("USER");
+        // 비밀번호는 평문 그대로 저장(간단 구현)
+        mapper.insert(user);
+    }
 
-	@Override
-	@Transactional
-	public void register(UserVO user) {
-		// 비밀번호 암호화
-		String raw = user.getPassword();
-		user.setPassword(encoder.encode(raw));
-
-		// 기본 역할 설정
-		user.setRole("ROLE_USER");
-
-		// MyBatis 매퍼 사용
-		userMapper.insert(user);
-	}
-
-	@Override
-	public UserVO getByUsername(String username) {
-		return userMapper.findByUsername(username);
-	}
+    @Override
+    public UserVO login(String username, String rawPassword) {
+        UserVO dbUser = mapper.findByUsername(username);
+        if (dbUser != null && dbUser.getPassword().equals(rawPassword)) {
+            return dbUser;
+        }
+        return null;
+    }
 }

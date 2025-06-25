@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kakaopage.expansion.dao.UserMapper">
+
+  <resultMap id="userResult" type="com.kakaopage.expansion.vo.UserVO">
+    <id     property="id"       column="ID"/>
+    <result property="username" column="USERNAME"/>
+    <result property="password" column="PASSWORD"/>
+    <result property="role"     column="ROLE"/>
+  </resultMap>
+
   <insert id="insert" parameterType="com.kakaopage.expansion.vo.UserVO">
-    INSERT INTO USERS(username, password, role)
+    INSERT INTO USERS(USERNAME, PASSWORD, ROLE)
     VALUES(#{username}, #{password}, #{role})
   </insert>
-  <select id="findByUsername" parameterType="String" resultType="com.kakaopage.expansion.vo.UserVO">
+
+  <select id="findByUsername" parameterType="String" resultMap="userResult">
     SELECT * FROM USERS WHERE USERNAME = #{username}
   </select>
+
 </mapper>

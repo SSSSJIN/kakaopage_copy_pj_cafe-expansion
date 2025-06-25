@@ -109,25 +109,37 @@
       color: #191919;
       text-decoration: none;
     }
+    .error-msg {
+      color: #d32f2f;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <!-- 로그인 박스만 중앙에 띄우는 래퍼 -->
   <div class="login-page">
     <div class="login-box">
       <h1>kakao</h1>
 
-      <input type="text" id="id" placeholder="카카오메일 아이디, 이메일, 전화번호"/>
-      <input type="password" id="pw" placeholder="비밀번호"/>
+      <!-- (1) form 태그로 변경 -->
+      <form action="${pageContext.request.contextPath}/login" method="post" style="display:flex;flex-direction:column;">
+        <input name="username" type="text" placeholder="카카오메일 아이디, 이메일, 전화번호" required/>
+        <input name="password" type="password" placeholder="비밀번호" required/>
 
-      <label class="option">
-        <input type="checkbox" id="auto"/> 간편로그인 정보 저장
-      </label>
+        <label class="option">
+          <input type="checkbox" name="rememberMe"/> 간편로그인 정보 저장
+        </label>
 
-      <button class="btn-login" onclick="doLogin()">로그인</button>
+        <!-- (2) 버튼도 submit -->
+        <button type="submit" class="btn-login">로그인</button>
+      </form>
+
+      <c:if test="${not empty param.error}">
+        <div class="error-msg">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+      </c:if>
 
       <div class="or">또는</div>
-      <button class="btn-qr">QR코드 로그인</button>
+      <button class="btn-qr" onclick="alert('QR 로그인은 추후 구현 예정입니다')">QR코드 로그인</button>
 
       <div class="links">
         <a href="${pageContext.request.contextPath}/signup">회원가입</a>
@@ -137,32 +149,7 @@
     </div>
   </div>
 
-  <!-- 푸터는 래퍼 밖, body 아래에 그대로 -->
+  <!-- 푸터 포함 -->
   <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-
-  <script>
-    async function doLogin() {
-      const id = document.getElementById('id').value.trim();
-      const pw = document.getElementById('pw').value;
-      try {
-        const resp = await fetch(
-          '${pageContext.request.contextPath}/api/auth/login', {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({id, pw})
-          }
-        );
-        const result = await resp.json();
-        if (resp.ok && result.success) {
-          window.location.href = '${pageContext.request.contextPath}/home';
-        } else {
-          alert(result.message || '로그인 실패');
-        }
-      } catch(err) {
-        console.error(err);
-        alert('서버 통신 중 오류가 발생했습니다.');
-      }
-    }
-  </script>
 </body>
 </html>
