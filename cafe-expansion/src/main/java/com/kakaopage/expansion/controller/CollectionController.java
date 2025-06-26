@@ -1,18 +1,18 @@
 package com.kakaopage.expansion.controller;
 
-import com.kakaopage.expansion.service.HistoryService;
-import com.kakaopage.expansion.service.LikeService;
-import com.kakaopage.expansion.vo.BookVO;
-import com.kakaopage.expansion.vo.UserVO;
+import java.util.List;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.kakaopage.expansion.service.HistoryService;
+import com.kakaopage.expansion.service.LikeService;
+import com.kakaopage.expansion.vo.BookVO;
+
+// ↓ javax.servlet.http.HttpSession 대신 jakarta.servlet.http.HttpSession 사용
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CollectionController {
@@ -21,34 +21,36 @@ public class CollectionController {
     private final LikeService likeService;
 
     @Autowired
-    public CollectionController(HistoryService historyService,
-                                LikeService likeService) {
+    public CollectionController(HistoryService historyService, LikeService likeService) {
         this.historyService = historyService;
         this.likeService    = likeService;
     }
 
-    @GetMapping("/collection")
-    public String collection(Model model,
-                             HttpSession session,
-                             @RequestParam(required = false, defaultValue = "recent") String tab) {
-        // 1) 로그인 체크
-        Object loginUser = session.getAttribute("loginUser");
-        if (loginUser == null) {
+    @GetMapping({"/collection","/collection/{tab}"})
+    public String collection(
+            Model model,
+            HttpSession session,
+            // 탭 구분용 파라미터: "recent" 또는 "liked"
+            @org.springframework.web.bind.annotation.PathVariable(name="tab", required=false) String tab
+    ) {
+        // 로그인 체크
+        Object userObj = session.getAttribute("loginUser");
+        if (userObj == null) {
+            // 비로그인 시 로그인 페이지로 리다이렉트
             return "redirect:/login";
         }
-        // 2) userId 추출
-        Long userId = ((UserVO) loginUser).getId();
+        Long userId = ((com.kakaopage.expansion.vo.UserVO)userObj).getId();
 
-        // 3) 탭에 따라 데이터 조회
-        if ("liked".equals(tab)) {
-            List<BookVO> likedBooks = likeService.getLikedBooksByUser(userId);
-            model.addAttribute("books", likedBooks);
+        // 기본 탭: recent
+        if (tab == null || !"liked".equals(tab)) {
+            List<BookVO> recent = historyService.getRecentViewsByUser(userId);
+            model.addAttribute("books", recent);
+            model.addAttribute("activeTab", "recent");
         } else {
-            List<BookVO> recentBooks = historyService.getRecentViewsByUser(userId);
-            model.addAttribute("books", recentBooks);
+            List<BookVO> liked = likeService.getLikedBooksByUser(userId);
+            model.addAttribute("books", liked);
+            model.addAttribute("activeTab", "liked");
         }
-
-        model.addAttribute("currentTab", tab);
-        return "collection";  // collection.jsp
+        return "collection";   // WEB-INF/views/collection.jsp
     }
 }

@@ -3,7 +3,6 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
@@ -13,55 +12,50 @@
          http://www.springframework.org/schema/tx
            https://www.springframework.org/schema/tx/spring-tx.xsd
          http://mybatis.org/schema/mybatis-spring
-           http://mybatis.org/schema/mybatis-spring-1.3.xsd
-         http://www.springframework.org/schema/mvc
-           https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+           http://mybatis.org/schema/mybatis-spring-1.3.xsd">
 
-  <!-- 1) 컴포넌트 스캔: Controller, Service, DAO -->
-  <context:component-scan base-package="
-      com.kakaopage.expansion.controller,
-      com.kakaopage.expansion.service,
-      com.kakaopage.expansion.dao" />
+  <!-- 1. 컴포넌트 스캔 -->
+  <context:component-scan base-package="com.kakaopage.expansion"/>
 
-  <!-- 2) 정적 리소스 매핑 -->
-  <mvc:resources mapping="/resources/**" location="/resources/" />
-
-  <!-- 3) DataSource (Commons-DBCP2) -->
+  <!-- 2. 데이터소스 (Commons-DBCP2) -->
   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
     <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-    <property name="url"             value="jdbc:oracle:thin:@localhost:1521:xe"/>
+    <property name="url"             value="jdbc:oracle:thin:@localhost:1521:XE"/>
     <property name="username"        value="hr"/>
     <property name="password"        value="hr"/>
-    <property name="initialSize"     value="5"/>
-    <property name="maxTotal"        value="20"/>
   </bean>
 
-  <!-- 4) MyBatis SqlSessionFactory 설정 -->
+  <!-- 3. MyBatis SqlSessionFactory -->
   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
     <property name="dataSource" ref="dataSource"/>
-    <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+    <property name="mapperLocations">
+      <list>
+        <value>classpath:mybatis/mapper/*.xml</value>
+      </list>
+    </property>
+    <!-- typeAliases 패키지 지정해두면 VO 참조 시 편리 -->
+    <property name="typeAliasesPackage" value="com.kakaopage.expansion.vo"/>
   </bean>
 
-  <!-- 5) MyBatis SqlSessionTemplate -->
+  <!-- 4. MyBatis SqlSessionTemplate -->
   <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
-    <constructor-arg ref="sqlSessionFactory"/>
+    <constructor-arg index="0" ref="sqlSessionFactory"/>
   </bean>
 
-  <!-- 6) MyBatis Mapper 인터페이스 스캐닝 -->
+  <!-- 5. MyBatis 매퍼 스캐너 -->
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <!-- 매퍼 인터페이스가 있는 패키지 -->
     <property name="basePackage" value="com.kakaopage.expansion.dao"/>
-  <!-- @Mapper 애노테이션이 붙은 인터페이스만 스캔 -->
-    <property name="annotationClass" value="org.apache.ibatis.annotations.Mapper"/>
+    <!-- 위에서 만든 SqlSessionTemplate 빈 이름 -->
     <property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate"/>
+    <!-- @Mapper 어노테이션 붙인 인터페이스만 스캔 -->
+    <property name="annotationClass" value="org.apache.ibatis.annotations.Mapper"/>
   </bean>
 
-  <!-- 7) 트랜잭션 매니저 -->
-  <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <!-- 6. 트랜잭션 매니저 -->
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
   </bean>
-  <tx:annotation-driven transaction-manager="txManager"/>
-
-  <!-- 8) JSON 컨버터 (필요 시) -->
-  <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+  <tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>
