@@ -7,6 +7,7 @@ import com.kakaopage.expansion.vo.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     private final UserMapper mapper;
 
     @Autowired
@@ -29,5 +30,17 @@ public class UserServiceImpl implements UserService {
             return dbUser;
         }
         return null;
+    }
+
+    // [추가] 아이디로 회원 조회 (AuthController에서 사용)
+    @Override
+    public UserVO findByUsername(String username) {
+        return mapper.findByUsername(username);
+    }
+
+    // [추가] 회원 저장 (AuthController에서 사용)
+    @Override
+    public void save(UserVO user) {
+        mapper.insert(user);
     }
 }
