@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakaopage.expansion.dao.EpisodeMapper">
+
+  <resultMap id="episodeResult" type="com.kakaopage.expansion.vo.EpisodeVO">
+    <id property="id" column="ID"/>
+    <result property="bookId" column="BOOK_ID"/>
+    <result property="title" column="TITLE"/>
+    <result property="episodeNo" column="EPISODE_NO"/>
+    <result property="regDate" column="REG_DATE"/>
+  </resultMap>
+
+  <select id="selectByBookId" parameterType="long" resultMap="episodeResult">
+    SELECT * FROM EPISODE WHERE BOOK_ID = #{bookId} ORDER BY EPISODE_NO DESC
+  </select>
+
+  <select id="selectById" parameterType="long" resultMap="episodeResult">
+    SELECT * FROM EPISODE WHERE ID = #{id}
+  </select>
+
+  <insert id="insert" parameterType="com.kakaopage.expansion.vo.EpisodeVO">
+    INSERT INTO EPISODE (ID, BOOK_ID, TITLE, EPISODE_NO, REG_DATE)
+    VALUES (EPISODE_SEQ.NEXTVAL, #{bookId}, #{title}, #{episodeNo}, SYSDATE)
+  </insert>
+</mapper>

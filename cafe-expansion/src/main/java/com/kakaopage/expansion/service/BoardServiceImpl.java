@@ -1,10 +1,8 @@
 package com.kakaopage.expansion.service;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.kakaopage.expansion.dao.BoardDao;
 import com.kakaopage.expansion.vo.BoardVO;
 
@@ -43,5 +41,12 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void remove(Long id) {
         boardDao.delete(id);
+    }
+
+    
+    @Override
+    public int updateThumbnail(Long id, String thumbnail) {
+       
+        return 0;
     }
 }

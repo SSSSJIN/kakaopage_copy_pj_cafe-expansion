@@ -1,31 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kakaopage.expansion.dao.CommentMapper">
 
-  <resultMap id="CommentResult" type="com.kakaopage.expansion.vo.CommentVO">
-    <id     property="id"        column="ID" />
-    <result property="boardId"   column="BOARD_ID"/>
-    <result property="userId"    column="USER_ID"/>
-    <result property="content"   column="CONTENT"/>
-    <result property="regdate"   column="REGDATE"/>
+  <resultMap id="commentResult" type="com.kakaopage.expansion.vo.CommentVO">
+    <id property="id" column="ID"/>
+    <result property="bookId" column="BOOK_ID"/>
+    <result property="content" column="CONTENT"/>
+    <result property="writer" column="WRITER"/>
+    <result property="regDate" column="REG_DATE"/>
   </resultMap>
 
-  <select id="selectByBoardId" parameterType="long" resultMap="CommentResult">
-    SELECT ID, BOARD_ID, USER_ID, CONTENT, REGDATE
-      FROM COMMENT
-     WHERE BOARD_ID = #{boardId}
-     ORDER BY REGDATE
+  <select id="selectByBookId" parameterType="long" resultMap="commentResult">
+    SELECT * FROM COMMENT WHERE BOOK_ID = #{bookId} ORDER BY REG_DATE DESC
   </select>
 
   <insert id="insert" parameterType="com.kakaopage.expansion.vo.CommentVO">
-    INSERT INTO COMMENT (BOARD_ID, USER_ID, CONTENT, REGDATE)
-    VALUES (#{boardId}, #{userId}, #{content}, SYSTIMESTAMP)
+    INSERT INTO COMMENT (ID, BOOK_ID, CONTENT, WRITER, REG_DATE)
+    VALUES (COMMENT_SEQ.NEXTVAL, #{bookId}, #{content}, #{writer}, SYSDATE)
   </insert>
 
   <delete id="delete" parameterType="long">
     DELETE FROM COMMENT WHERE ID = #{commentId}
   </delete>
-
 </mapper>

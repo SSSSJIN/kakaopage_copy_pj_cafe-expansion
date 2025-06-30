@@ -4,19 +4,18 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.kakaopage.expansion.vo.BookVO;
+import com.kakaopage.expansion.vo.EpisodeVO;
 
 @Mapper
 public interface BookMapper {
-
     List<BookVO> getHotBooks();
     List<BookVO> getRankingBooks();
     List<BookVO> getRecentBooks(@Param("userId") Long userId);
     List<BookVO> getAllBooks();
-    BookVO      getBookById(@Param("id") Long id);
+    BookVO getBookById(@Param("id") int id); // int로 통일
     List<BookVO> getBooksByTitle(@Param("title") String title);
-    int          insertBook(BookVO book);
 
-    /** 새로 추가: id에 해당하는 행의 thumbnail 컬럼을 업데이트 */
-    int updateThumbnail(@Param("id") Long id,
-                        @Param("thumbnail") String thumbnail);
+    // 에피소드 연동
+    List<EpisodeVO> getEpisodesByBookId(@Param("bookId") int bookId);
+    int countBookLikes(@Param("bookId") int bookId);
 }

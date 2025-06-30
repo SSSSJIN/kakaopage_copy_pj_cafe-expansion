@@ -7,9 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.PostMapping;
 /**
- * 인증(로그인/회원가입) 관련 컨트롤러
+ * 인증(카카오 로그인/회원가입/로그아웃) 통합 컨트롤러
  */
 @Controller
 public class AuthController {
@@ -17,96 +23,126 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    // 로그인 폼 페이지
-    @GetMapping("/login")
+    // 카카오 REST API Key (appkey)
+    private static final String KAKAO_CLIENT_ID = "e8da3210f814e01f61a25d163730ebd2";
+    // 카카오 Redirect URI (카카오 개발자센터 등록 필요)
+    private static final String KAKAO_REDIRECT_URI = "http://localhost:8080/cafe-expansion/kakao-callback";
+
+    /**
+     * 로그인/회원가입 통합 폼 (카카오 버튼만 노출)
+     */
+    @GetMapping({"/login", "/signup"})
     public String loginForm() {
-        return "login"; // /WEB-INF/views/login.jsp
+        return "login"; // signup.jsp도 login.jsp와 동일하게 처리
     }
-
-    // 회원가입 폼 페이지
-    @GetMapping("/signup")
-    public String signupForm() {
-        return "signup"; // /WEB-INF/views/signup.jsp
-    }
-
-    // === [1] 일반 폼 전송(HTML form) 방식 지원 추가 ===
 
     /**
-     * 로그인 폼 전송 처리 (일반 폼 전송)
-     * @param username 아이디
-     * @param password 비밀번호
+     * 카카오 로그인 콜백
+     * code 파라미터로 토큰 발급 → 사용자 정보 조회 → 회원 등록/조회 → 세션 저장 → 홈으로 이동
      */
-    @PostMapping("/login")
-    public String login(
-            @RequestParam("username") String username,
-            @RequestParam("password") String password,
-            HttpSession session,
-            Model model) {
-        UserVO user = userService.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            // 로그인 성공: 세션에 사용자 정보 저장
+    @GetMapping("/kakao-callback")
+    public String kakaoCallback(@RequestParam("code") String code, HttpSession session, Model model) {
+        try {
+            // 1. 인가코드로 토큰 요청
+            RestTemplate restTemplate = new RestTemplate();
+            String tokenUrl = "https://kauth.kakao.com/oauth/token";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            String body = "grant_type=authorization_code"
+                    + "&client_id=" + KAKAO_CLIENT_ID
+                    + "&redirect_uri=" + KAKAO_REDIRECT_URI
+                    + "&code=" + code;
+
+            HttpEntity<String> request = new HttpEntity<>(body, headers);
+            ResponseEntity<String> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, String.class);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode tokenJson = objectMapper.readTree(response.getBody());
+            String accessToken = tokenJson.get("access_token").asText();
+
+            // 2. 토큰으로 사용자 정보 요청
+            String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+            HttpHeaders userHeaders = new HttpHeaders();
+            userHeaders.add("Authorization", "Bearer " + accessToken);
+            HttpEntity<String> userRequest = new HttpEntity<>(userHeaders);
+            ResponseEntity<String> userResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userRequest, String.class);
+
+            JsonNode userJson = objectMapper.readTree(userResponse.getBody());
+            String kakaoId = userJson.get("id").asText();
+            String email = userJson.path("kakao_account").path("email").asText("");
+            String nickname = userJson.path("properties").path("nickname").asText("");
+            String profileImageUrl = userJson.path("properties").path("profile_image").asText("");
+
+            // 3. 회원 여부 확인/등록
+            UserVO user = userService.findByKakaoId(kakaoId);
+            if (user == null) {
+                user = new UserVO();
+                user.setKakaoId(kakaoId);
+                user.setUsername(email.isEmpty() ? nickname : email);
+                user.setNickname(nickname);
+                user.setEmail(email);
+                user.setProfileImageUrl(profileImageUrl);
+                user.setRole("USER");
+                userService.save(user);
+            }
+
+            // 4. 세션 저장
             session.setAttribute("user", user);
+            session.setAttribute("access_token", accessToken);
+
+            // 5. 홈으로 리다이렉트
             return "redirect:/home";
-        } else {
-            // 로그인 실패: 에러 메시지 전달
-            model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
-            return "login";
+        } catch (Exception e) {
+            model.addAttribute("error", "카카오 로그인 실패: " + e.getMessage());
+            return "kakao-callback";
         }
     }
 
     /**
-     * 회원가입 폼 전송 처리 (일반 폼 전송)
-     * @param username 아이디
-     * @param password 비밀번호
+     * 카카오 로그아웃 (세션 무효화 + 카카오 API 토큰 만료)
      */
-    @PostMapping("/signup")
-    public String signup(
-            @RequestParam("username") String username,
-            @RequestParam("password") String password,
-            Model model) {
-        // 이미 존재하는 아이디인지 확인
-        if (userService.findByUsername(username) != null) {
-            model.addAttribute("error", "이미 존재하는 아이디입니다.");
-            return "signup";
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        String accessToken = (String) session.getAttribute("access_token");
+        if (accessToken != null) {
+            try {
+                String logoutUrl = "https://kapi.kakao.com/v1/user/logout";
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Authorization", "Bearer " + accessToken);
+                HttpEntity<String> request = new HttpEntity<>(headers);
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.exchange(logoutUrl, HttpMethod.POST, request, String.class);
+            } catch (Exception e) {
+                // 로그아웃 실패해도 세션만 무효화
+            }
         }
-        // 회원가입 처리
-        UserVO user = new UserVO();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setRole("USER");
-        userService.save(user);
-        // 회원가입 성공 후 로그인 페이지로 이동
+        session.invalidate(); // 세션 무효화
         return "redirect:/login";
     }
-
-    // === [2] 기존 JSON 방식(AJAX)도 유지하고 싶으면 아래 코드도 함께 사용 ===
-
-    /**
-     * 로그인 (AJAX/JSON 방식)
-     */
-    @PostMapping("/api/auth/login")
-    @ResponseBody
-    public String loginApi(@RequestBody UserVO user, HttpSession session) {
-        UserVO dbUser = userService.findByUsername(user.getUsername());
-        if (dbUser != null && dbUser.getPassword().equals(user.getPassword())) {
-            session.setAttribute("user", dbUser);
-            return "{\"result\":\"success\"}";
-        } else {
-            return "{\"result\":\"fail\"}";
+    
+    @GetMapping("/account")
+    public String accountPage(HttpSession session, Model model) {
+        UserVO user = (UserVO) session.getAttribute("user");
+        if (user == null) return "redirect:/login";
+        model.addAttribute("user", user);
+        return "account";
+    }
+    
+    @PostMapping("/withdraw")
+    public String withdrawUser(HttpSession session) {
+        UserVO user = (UserVO) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login"; // 로그인 안 된 경우
+        }
+        try {
+            userService.withdrawal(user); // 실제 탈퇴 처리
+            session.invalidate(); // 세션 무효화
+            return "redirect:/login"; // 탈퇴 후 로그인 페이지로 이동
+        } catch (Exception e) {
+            // 에러 처리: 에러 페이지나 메시지 전달 등
+            return "errorPage";
         }
     }
 
-    /**
-     * 회원가입 (AJAX/JSON 방식)
-     */
-    @PostMapping("/api/auth/signup")
-    @ResponseBody
-    public String signupApi(@RequestBody UserVO user) {
-        if (userService.findByUsername(user.getUsername()) != null) {
-            return "{\"result\":\"duplicate\"}";
-        }
-        user.setRole("USER");
-        userService.save(user);
-        return "{\"result\":\"success\"}";
-    }
 }

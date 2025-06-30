@@ -1,53 +1,88 @@
 package com.kakaopage.expansion.controller;
 
-import java.util.List;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kakaopage.expansion.service.BookService;
-import com.kakaopage.expansion.service.KakaoApiService;
 import com.kakaopage.expansion.vo.BookVO;
+import com.kakaopage.expansion.vo.CommentVO;
+import com.kakaopage.expansion.vo.EpisodeVO;
+import com.kakaopage.expansion.service.BookService;
+import com.kakaopage.expansion.service.CommentService;
+import com.kakaopage.expansion.service.BookLikeService;
+import com.kakaopage.expansion.service.EpisodeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * 추가 기능: DB의 thumbnail 컬럼을 카카오 API에서 채우는 엔드포인트
- */
-@RestController
-@RequestMapping("/api/books")
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Controller
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    @Autowired private BookService bookService;
+    @Autowired private CommentService commentService;
+    @Autowired private BookLikeService bookLikeService;
+    @Autowired private EpisodeService episodeService;
 
-    @Autowired
-    private KakaoApiService kakaoApiService;
+    // 상세 페이지
+    @GetMapping("/detail")
+    public String detail(@RequestParam("bookId") int bookId, Model model) {
+        BookVO book = bookService.getBookById(bookId);
+        List<EpisodeVO> episodes = episodeService.getEpisodesByBookId((long)bookId);
+        List<CommentVO> comments = commentService.getCommentsByBookId((long)bookId);
+        int likeCount = bookLikeService.countBookLikes((long)bookId);
+        Long nextEpisodeId = (episodes != null && episodes.size() > 1) ? episodes.get(1).getId() : (episodes != null && !episodes.isEmpty() ? episodes.get(0).getId() : null);
 
-    private final ObjectMapper mapper = new ObjectMapper();
+        model.addAttribute("book", book);
+        model.addAttribute("episodes", episodes);
+        model.addAttribute("comments", comments);
+        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("nextEpisodeId", nextEpisodeId);
 
-    /**
-     * GET /api/books/fetch-thumbnails
-     * thumbnail이 비어 있는 책들을 조회 → 카카오 도서 검색 API 호출 → DB 업데이트
-     */
-    @GetMapping("/fetch-thumbnails")
-    public String fetchThumbnails() throws Exception {
-        List<BookVO> list = bookService.getAllBooks();
-        int updated = 0;
+        return "detail";
+    }
 
-        for (BookVO book : list) {
-            if (book.getThumbnail() == null || book.getThumbnail().isEmpty()) {
-                String json = kakaoApiService.searchBook(book.getTitle());
-                JsonNode doc = mapper.readTree(json)
-                                     .path("documents")
-                                     .get(0);
-                if (doc != null && doc.has("thumbnail")) {
-                    String thumb = doc.path("thumbnail").asText();
-                    bookService.updateThumbnail(book.getId(), thumb);
-                    updated++;
-                }
+    @PostMapping("/comment")
+    public String postComment(@RequestParam("bookId") Long bookId, @RequestParam("content") String content) {
+        CommentVO comment = new CommentVO();
+        comment.setBookId(bookId);
+        comment.setContent(content);
+        comment.setWriter("익명");
+        comment.setRegDate(LocalDateTime.now());
+        commentService.insertComment(comment);
+        return "redirect:/detail?bookId=" + bookId;
+    }
+
+    @PostMapping("/like")
+    public String like(@RequestParam("bookId") Long bookId) {
+        Long userId = 1L;
+        bookLikeService.like(bookId, userId);
+        return "redirect:/detail?bookId=" + bookId;
+    }
+
+    @PostMapping("/unlike")
+    public String unlike(@RequestParam("bookId") Long bookId) {
+        Long userId = 1L;
+        bookLikeService.unlike(bookId, userId);
+        return "redirect:/detail?bookId=" + bookId;
+    }
+
+    @GetMapping("/viewer")
+    public String viewer(@RequestParam("bookId") int bookId,
+                         @RequestParam("episodeId") Long episodeId,
+                         Model model) {
+        BookVO book = bookService.getBookById(bookId);
+        EpisodeVO episode = episodeService.getEpisodeById(episodeId);
+        List<EpisodeVO> episodes = bookService.getEpisodesByBookId(bookId);
+        Long nextEpisodeId = null;
+        for (int i = 0; i < episodes.size(); i++) {
+            if (episodes.get(i).getId().equals(episodeId) && i < episodes.size() - 1) {
+                nextEpisodeId = episodes.get(i + 1).getId();
+                break;
             }
         }
-        return "썸네일 업데이트 완료: " + updated + "건";
+        model.addAttribute("book", book);
+        model.addAttribute("episode", episode);
+        model.addAttribute("nextEpisodeId", nextEpisodeId);
+        return "viewer";
     }
 }

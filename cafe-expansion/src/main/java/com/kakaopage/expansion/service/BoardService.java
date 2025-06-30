@@ -18,4 +18,10 @@ public interface BoardService {
 
     /** 게시글 삭제 */
     void remove(Long id);
+
+    /** (추가) 썸네일 업데이트 - 실제로 필요 없다면 빈 구현 */
+    default int updateThumbnail(Long id, String thumbnail) {
+        // 게시판에서 썸네일 업데이트가 필요 없다면 0 반환
+        return 0;
+    }
 }

@@ -9,15 +9,25 @@
     <result property="username" column="USERNAME"/>
     <result property="password" column="PASSWORD"/>
     <result property="role"     column="ROLE"/>
+    <result property="kakaoId"  column="KAKAO_ID"/>
+    <result property="nickname" column="NICKNAME"/>
+    <result property="email"    column="EMAIL"/>
+    <result property="profileImageUrl" column="PROFILE_IMAGE_URL"/>
+    <result property="joinDate" column="JOIN_DATE"/>
   </resultMap>
 
+  <select id="findByKakaoId" parameterType="String" resultMap="userResult">
+    SELECT * FROM USERS WHERE KAKAO_ID = #{kakaoId}
+  </select>
+
   <insert id="insert" parameterType="com.kakaopage.expansion.vo.UserVO">
-    INSERT INTO USERS(USERNAME, PASSWORD, ROLE)
-    VALUES(#{username}, #{password}, #{role})
+    INSERT INTO USERS (USERNAME, PASSWORD, ROLE, KAKAO_ID, NICKNAME, EMAIL, PROFILE_IMAGE_URL, JOIN_DATE)
+    VALUES (#{username}, #{password}, #{role}, #{kakaoId}, #{nickname}, #{email}, #{profileImageUrl}, SYSDATE)
   </insert>
 
-  <select id="findByUsername" parameterType="String" resultMap="userResult">
-    SELECT * FROM USERS WHERE USERNAME = #{username}
-  </select>
+  <!-- 회원 탈퇴(soft delete: status 변경) -->
+  <update id="withdrawal" parameterType="com.kakaopage.expansion.vo.UserVO">
+    UPDATE USERS SET STATUS = 'WITHDRAWN' WHERE KAKAO_ID = #{kakaoId}
+  </update>
 
 </mapper>

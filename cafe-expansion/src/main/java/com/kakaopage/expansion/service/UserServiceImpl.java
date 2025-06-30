@@ -2,6 +2,8 @@ package com.kakaopage.expansion.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.kakaopage.expansion.dao.UserMapper;
 import com.kakaopage.expansion.vo.UserVO;
 
@@ -16,31 +18,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(UserVO user) {
-        // 기본 ROLE 설정
-        user.setRole("USER");
-        // 비밀번호는 평문 그대로 저장(간단 구현)
-        mapper.insert(user);
+    public UserVO findByKakaoId(String kakaoId) {
+        return mapper.findByKakaoId(kakaoId);
     }
 
-    @Override
-    public UserVO login(String username, String rawPassword) {
-        UserVO dbUser = mapper.findByUsername(username);
-        if (dbUser != null && dbUser.getPassword().equals(rawPassword)) {
-            return dbUser;
-        }
-        return null;
-    }
-
-    // [추가] 아이디로 회원 조회 (AuthController에서 사용)
-    @Override
-    public UserVO findByUsername(String username) {
-        return mapper.findByUsername(username);
-    }
-
-    // [추가] 회원 저장 (AuthController에서 사용)
     @Override
     public void save(UserVO user) {
         mapper.insert(user);
+    }
+
+    /**
+     * 회원 탈퇴(서비스 탈퇴)
+     * - 관련 데이터(이미지, 게시글, 팔로우 등)도 함께 삭제/비활성화할 수 있음
+     * - 실제 DB 삭제 또는 status 변경(soft delete) 방식 모두 가능
+     */
+    @Override
+    @Transactional
+    public void withdrawal(UserVO user) throws Exception {
+        // 아래 메서드들은 필요에 따라 mapper에 직접 추가/구현하세요.
+        // 예시: 탈퇴시 관련 데이터도 함께 삭제
+        // mapper.deleteUserImg(user.getUserNo());
+        // mapper.deleteUserPosts(user.getUserNo());
+        // mapper.deleteUserFollows(user.getUserNo());
+
+        // 회원 DB에서 삭제 또는 status를 'WITHDRAWN' 등으로 변경
+        mapper.withdrawal(user);
     }
 }

@@ -1,56 +1,46 @@
 package com.kakaopage.expansion.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.kakaopage.expansion.dao.BookMapper;
 import com.kakaopage.expansion.vo.BookVO;
+import com.kakaopage.expansion.vo.EpisodeVO;
 
 @Service
 public class BookServiceImpl implements BookService {
-
-    @Autowired
-    private BookMapper mapper;
+    
+	@Autowired
+    private BookMapper bookMapper;
 
     @Override
+    public BookVO getBookById(int id) {
+        return bookMapper.getBookById(id);
+    }
+    
+    @Override
     public List<BookVO> getHotBooks() {
-        return mapper.getHotBooks();
+        return bookMapper.getHotBooks();
     }
 
     @Override
     public List<BookVO> getRankingBooks() {
-        return mapper.getRankingBooks();
-    }
-
-    @Override
-    public List<BookVO> getRecentBooks(Long userId) {
-        return mapper.getRecentBooks(userId);
-    }
-
-    @Override
-    public List<BookVO> getAllBooks() {
-        return mapper.getAllBooks();
-    }
-
-    @Override
-    public BookVO getBookById(Long id) {
-        return mapper.getBookById(id);
+        return bookMapper.getRankingBooks();
     }
 
     @Override
     public List<BookVO> getBooksByTitle(String title) {
-        return mapper.getBooksByTitle(title);
+        return bookMapper.getBooksByTitle(title);
     }
 
     @Override
-    public void insertBook(BookVO book) {
-        mapper.insertBook(book);
+    public List<EpisodeVO> getEpisodesByBookId(int bookId) {
+        return bookMapper.getEpisodesByBookId(bookId);
     }
 
     @Override
-    public void updateThumbnail(Long id, String thumbnail) {
-        mapper.updateThumbnail(id, thumbnail);
+    public int countBookLikes(int bookId) {
+        return bookMapper.countBookLikes(bookId);
     }
+
 }
