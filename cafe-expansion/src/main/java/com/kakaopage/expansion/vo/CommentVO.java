@@ -1,13 +1,11 @@
 package com.kakaopage.expansion.vo;
 
-import java.time.LocalDateTime;
-
 public class CommentVO {
     private Long id;
     private Long bookId; // boardId → bookId로 변경
     private String content;
     private String writer;
-    private LocalDateTime regDate;
+    private java.time.LocalDateTime regDate;
 
     // Getter/Setter
     public Long getId() { return id; }
@@ -18,6 +16,6 @@ public class CommentVO {
     public void setContent(String content) { this.content = content; }
     public String getWriter() { return writer; }
     public void setWriter(String writer) { this.writer = writer; }
-    public LocalDateTime getRegDate() { return regDate; }
-    public void setRegDate(LocalDateTime regDate) { this.regDate = regDate; }
+    public java.time.LocalDateTime getRegDate() { return regDate; }
+    public void setRegDate(java.time.LocalDateTime regDate) { this.regDate = regDate; }
 }

@@ -1,4 +1,5 @@
 package com.kakaopage.expansion.service;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,9 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.getCommentsByBookId(bookId);
     }
 
+
     @Override
-    public void insertComment(CommentVO comment) {
-        commentMapper.insertComment(comment);
+    public void add(CommentVO comment) {
+        commentMapper.insert(comment);
     }
 }

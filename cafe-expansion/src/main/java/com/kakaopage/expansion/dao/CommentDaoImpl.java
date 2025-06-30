@@ -23,7 +23,7 @@ public class CommentDaoImpl implements CommentDao {
 
     @Override
     public void insert(CommentVO vo) {
-        commentMapper.insert(vo);
+        commentMapper.add(vo);
     }
 
     @Override

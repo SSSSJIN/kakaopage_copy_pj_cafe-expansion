@@ -7,7 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface CommentMapper {
-    List<CommentVO> selectByBookId(@Param("bookId") Long bookId);
-    void insert(CommentVO vo);
+
+    List<CommentVO> getCommentsByBookId(@Param("bookId") Long bookId);
+    void add(CommentVO vo);
     void delete(@Param("commentId") Long commentId);
 }
