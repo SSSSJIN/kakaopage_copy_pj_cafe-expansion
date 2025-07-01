@@ -3,42 +3,33 @@
 <%
   com.kakaopage.expansion.vo.UserVO user = (com.kakaopage.expansion.vo.UserVO) session.getAttribute("user");
 %>
-<style>
-.header-bar { width: 100%; background: #fff; border-bottom: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.03); font-family: 'Pretendard', 'Noto Sans KR', sans-serif; }
-.header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 68px; padding: 0 24px; }
-.logo-area { display: flex; align-items: center; margin-right: 36px; }
-.logo-img { height: 40px; margin-right: 12px; vertical-align: middle; }
-.logo-text { font-size: 2rem; font-weight: bold; color: #191919; text-decoration: none; letter-spacing: -1px; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; user-select: none; vertical-align: middle; }
-.nav { display: flex; align-items: center; gap: 32px; }
-.nav-link { color: #222 !important; text-decoration: none; font-size: 1.13rem; font-weight: 600; transition: color 0.2s; padding: 4px 0; }
-.nav-link:hover { color: #f7b500 !important; border-bottom: 2px solid #f7b500; }
-.right-area { display: flex; align-items: center; gap: 16px; }
-.search-area { display: flex; align-items: center; background: #fafafa; border: 1px solid #eee; border-radius: 18px; padding: 0 12px 0 16px; height: 38px; margin-right: 12px; }
-.search-input { width: 150px; border: none; background: transparent; font-size: 1rem; color: #222; outline: none; }
-.search-btn { background: none; border: none; cursor: pointer; padding: 0 0 0 8px; display: flex; align-items: center; }
-.search-btn img { width: 20px; height: 20px; }
-.library-link { margin-right: 10px; margin-left: 10px; display: flex; align-items: center; }
-.library-icon { width: 26px; height: 26px; cursor: pointer; transition: filter 0.15s; filter: grayscale(0); }
-.library-icon:hover { filter: brightness(1.1) drop-shadow(0 0 4px #f7b50044); }
-.user-area { display: flex; align-items: center; position: relative; }
-.user-profile { width: 38px; height: 38px; border-radius: 50%; margin-left: 16px; cursor: pointer; border: 1px solid #eee; background: #fafafa; transition: box-shadow 0.2s; }
-.user-profile:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.user-info-popover { display: none; position: absolute; top: 54px; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); padding: 20px 28px; min-width: 230px; z-index: 100; }
-.user-area:hover .user-info-popover { display: block; }
-.user-nickname { margin-left: 10px; font-weight: 500; }
-.kakao-login-btn { margin-left: 20px; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; }
-.kakao-login-btn img { height: 40px; }
-.user-info-popover { /* ... (팝업 스타일) ... */ }
-.user-nickname-btn { background: none; border: none; font-size: 1.07rem; font-weight: 600; color: #222; cursor: pointer; padding: 0 12px; height: 38px; border-radius: 19px; transition: background 0.15s; }
-.user-nickname-btn:hover { background: #f7f7f7; }
-.logout-btn { background: #fff; color: #f00; border: 1px solid #eee; border-radius: 8px; padding: 8px 18px; font-size: 1rem; cursor: pointer; margin-top: 16px; width: 100%; transition: background 0.13s; }
-.logout-btn:hover { background: #fff0f0; }
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>카카오페이지 확장</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pretendard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/62b5eaaa32983221.css">
+
+    <c:if test="${empty user}">
+      <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+      <script>
+        Kakao.init('a43481684e7ca266c31cb57d5ffed16f');
+        function kakaoLogin() {
+          Kakao.Auth.authorize({
+            redirectUri: 'http://localhost:8080/cafe-expansion/kakao-callback'
+          });
+        }
+      </script>
+    </c:if>
+</head>
+<body>
 
 <div class="header-bar">
   <div class="header-inner">
     <a href="${pageContext.request.contextPath}/home" class="logo-area">
-      <img src="https://page.kakaocdn.net/pageweb/2.29.6/public/images/img_logo_bi_text_l.svg" alt="kakaopage" class="logo-img" />
+      <span style="font-size:2rem;font-weight:bold;color:#222;">kakaopage</span>
     </a>
     <div class="nav">
       <a href="${pageContext.request.contextPath}/home" class="nav-link">지금 핫한</a>
@@ -58,8 +49,9 @@
       <div class="user-area">
         <c:choose>
           <c:when test="${not empty user}">
-            <button type="button" class="user-nickname-btn" onclick="toggleInfo1Popup(event)">
-              ${user.nickname}
+            <button type="button" class="kakao-login-btn" onclick="toggleInfo1Popup(event)" style="display:flex;align-items:center;gap:2px;">
+              <img src="data:image/svg+xml,%3csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3e %3cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.0009 2C9.23899 2 7 4.23898 7 7.00091C7 9.76285 9.23899 12.0018 12.0009 12.0018C14.7629 12.0018 17.0018 9.76285 17.0018 7.00091C17.0018 4.23898 14.7629 2 12.0009 2ZM8.5 7.00091C8.5 5.06741 10.0674 3.5 12.0009 3.5C13.9344 3.5 15.5018 5.06741 15.5018 7.00091C15.5018 8.93441 13.9344 10.5018 12.0009 10.5018C10.0674 10.5018 8.5 8.93441 8.5 7.00091Z' fill='%23222222'/%3e %3cpath d='M8.75 14C5.02208 14 2 17.0221 2 20.75V21.9953H3.5V20.75C3.5 17.8505 5.85051 15.5 8.75 15.5H15.2527C18.1522 15.5 20.5027 17.8505 20.5027 20.75V21.9953H22.0027V20.75C22.0027 17.0221 18.9807 14 15.2527 14H8.75Z' fill='%23222222'/%3e %3c/svg%3e" alt="로그인" style="height:40px;">
+              <img src="data:image/svg+xml,%3csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3e %3cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.04482 3.5L6 6.42893L8.95518 3.5L10 4.53553L6 8.5L2 4.53553L3.04482 3.5Z' fill='%23222222'/%3e %3c/svg%3e" alt="아래화살표" style="height:18px;">
             </button>
             <div id="info1-popup" class="user-info-popover" style="display:none;">
               <a href="${pageContext.request.contextPath}/account" class="user-nickname-btn" style="display:block;text-align:center;font-weight:bold;">
@@ -83,7 +75,7 @@
           </c:when>
           <c:otherwise>
             <button type="button" class="kakao-login-btn" onclick="kakaoLogin()">
-              <img src="data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.0009 2C9.23899 2 7 4.23898 7 7.00091C7 9.76285 9.23899 12.0018 12.0009 12.0018C14.7629 12.0018 17.0018 9.76285 17.0018 7.00091C17.0018 4.23898 14.7629 2 12.0009 2ZM8.5 7.00091C8.5 5.06741 10.0674 3.5 12.0009 3.5C13.9344 3.5 15.5018 5.06741 15.5018 7.00091C15.5018 8.93441 13.9344 10.5018 12.0009 10.5018C10.0674 10.5018 8.5 8.93441 8.5 7.00091Z' fill='%23222222'/%3E%3Cpath d='M8.75 14C5.02208 14 2 17.0221 2 20.75V21.9953H3.5V20.75C3.5 17.8505 5.85051 15.5 8.75 15.5H15.2527C18.1522 15.5 20.5027 17.8505 20.5027 20.75V21.9953H22.0027V20.75C22.0027 17.0221 18.9807 14 15.2527 14H8.75Z' fill='%23222222'/%3E%3C/svg%3E" alt="로그인" />
+              <img src="data:image/svg+xml,%3csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3e %3cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.0009 2C9.23899 2 7 4.23898 7 7.00091C7 9.76285 9.23899 12.0018 12.0009 12.0018C14.7629 12.0018 17.0018 9.76285 17.0018 7.00091C17.0018 4.23898 14.7629 2 12.0009 2ZM8.5 7.00091C8.5 5.06741 10.0674 3.5 12.0009 3.5C13.9344 3.5 15.5018 5.06741 15.5018 7.00091C15.5018 8.93441 13.9344 10.5018 12.0009 10.5018C10.0674 10.5018 8.5 8.93441 8.5 7.00091Z' fill='%23222222'/%3e %3cpath d='M8.75 14C5.02208 14 2 17.0221 2 20.75V21.9953H3.5V20.75C3.5 17.8505 5.85051 15.5 8.75 15.5H15.2527C18.1522 15.5 20.5027 17.8505 20.5027 20.75V21.9953H22.0027V20.75C22.0027 17.0221 18.9807 14 15.2527 14H8.75Z' fill='%23222222'/%3e %3c/svg%3e" alt="로그인" style="height:40px;">
             </button>
           </c:otherwise>
         </c:choose>

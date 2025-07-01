@@ -2,32 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
-<style>
-/* 간단한 스타일 (필요시 style.css로 이동) */
-.detail-container { max-width: 900px; margin: 40px auto; background: #fff; padding: 36px 32px 32px 32px; border-radius: 12px; box-shadow: 0 2px 12px #0001; }
-.detail-main { display: flex; gap: 32px; }
-.detail-cover { width: 220px; }
-.detail-cover img { width: 100%; border-radius: 10px; box-shadow: 0 3px 12px #0002; }
-.detail-info { flex: 1; }
-.detail-title { font-size: 2rem; font-weight: bold; margin-bottom: 10px; }
-.detail-meta { color: #888; font-size: 1.1rem; margin-bottom: 8px; }
-.detail-desc { margin: 18px 0 24px 0; color: #444; }
-.detail-actions { display: flex; gap: 24px; align-items: center; margin-bottom: 24px; }
-.like-btn { background: none; border: none; cursor: pointer; font-size: 1.7rem; color: #f7b500; }
-.next-ep-btn { background: #f7b500; color: #fff; border: none; border-radius: 8px; padding: 10px 32px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
-.detail-tabs { display: flex; gap: 20px; margin-top: 28px; }
-.detail-tab { background: none; border: none; font-size: 1.1rem; padding: 8px 16px; border-radius: 8px; cursor: pointer; color: #222; }
-.detail-tab.active { background: #f7b50022; color: #f7b500; font-weight: bold; }
-.episode-list { margin-top: 24px; }
-.episode-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
-.episode-title { font-weight: 500; }
-.comment-section { margin-top: 40px; }
-.comment-list { margin-top: 16px; }
-.comment-item { padding: 12px 0; border-bottom: 1px solid #f1f1f1; }
-.comment-meta { color: #888; font-size: 0.96rem; margin-bottom: 4px; }
-.comment-content { font-size: 1.08rem; }
-</style>
-
 <div class="detail-container">
   <div class="detail-main">
     <!-- 책 표지 -->

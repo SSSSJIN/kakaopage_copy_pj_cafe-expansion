@@ -15,7 +15,6 @@
     <div style="display:flex; gap:24px; flex-wrap:wrap;">
       <c:forEach var="book" items="${rankingBooks}">
         <div style="width:160px; text-align:center;">
-          <!-- 상세게시판으로 이동하는 링크 -->
           <a href="${pageContext.request.contextPath}/detail?bookId=${book.id}">
             <img src="${pageContext.request.contextPath}${book.imageUrl}" alt="${book.title}" style="width:100%; border-radius:8px;">
           </a>

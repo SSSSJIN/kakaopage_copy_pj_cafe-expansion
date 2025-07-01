@@ -2,6 +2,7 @@ package com.kakaopage.expansion.controller;
 
 import com.kakaopage.expansion.service.UserService;
 import com.kakaopage.expansion.vo.UserVO;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.PostMapping;
-/**
- * 인증(카카오 로그인/회원가입/로그아웃) 통합 컨트롤러
- */
 @Controller
 public class AuthController {
 
@@ -28,9 +24,7 @@ public class AuthController {
     // 카카오 Redirect URI (카카오 개발자센터 등록 필요)
     private static final String KAKAO_REDIRECT_URI = "http://localhost:8080/cafe-expansion/kakao-callback";
 
-    /**
-     * 로그인/회원가입 통합 폼 (카카오 버튼만 노출)
-     */
+    /** 로그인/회원가입 통합 폼 (카카오 버튼만 노출) */
     @GetMapping({"/login", "/signup"})
     public String loginForm() {
         return "login"; // signup.jsp도 login.jsp와 동일하게 처리
@@ -76,14 +70,28 @@ public class AuthController {
 
             // 3. 회원 여부 확인/등록
             UserVO user = userService.findByKakaoId(kakaoId);
+
             if (user == null) {
                 user = new UserVO();
                 user.setKakaoId(kakaoId);
-                user.setUsername(email.isEmpty() ? nickname : email);
+
+                // USERNAME은 반드시 NOT NULL이어야 하므로, 아래처럼 보장
+                String username;
+                if (email != null && !email.isEmpty()) {
+                    username = email;
+                } else if (nickname != null && !nickname.isEmpty()) {
+                    username = nickname;
+                } else {
+                    username = "kakao_" + kakaoId;
+                }
+                user.setUsername(username);
+
                 user.setNickname(nickname);
                 user.setEmail(email);
                 user.setProfileImageUrl(profileImageUrl);
                 user.setRole("USER");
+                user.setPassword("KAKAO_USER"); // 소셜 로그인 계정 구분용 임의값
+
                 userService.save(user);
             }
 
@@ -99,9 +107,7 @@ public class AuthController {
         }
     }
 
-    /**
-     * 카카오 로그아웃 (세션 무효화 + 카카오 API 토큰 만료)
-     */
+    /** 카카오 로그아웃 (세션 무효화 + 카카오 API 토큰 만료) */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         String accessToken = (String) session.getAttribute("access_token");
@@ -120,7 +126,7 @@ public class AuthController {
         session.invalidate(); // 세션 무효화
         return "redirect:/login";
     }
-    
+
     @GetMapping("/account")
     public String accountPage(HttpSession session, Model model) {
         UserVO user = (UserVO) session.getAttribute("user");
@@ -128,7 +134,7 @@ public class AuthController {
         model.addAttribute("user", user);
         return "account";
     }
-    
+
     @PostMapping("/withdraw")
     public String withdrawUser(HttpSession session) {
         UserVO user = (UserVO) session.getAttribute("user");
@@ -144,5 +150,4 @@ public class AuthController {
             return "errorPage";
         }
     }
-
 }
