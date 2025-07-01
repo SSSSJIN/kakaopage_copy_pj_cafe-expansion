@@ -109,7 +109,7 @@ public class AuthController {
 
     /** 카카오 로그아웃 (세션 무효화 + 카카오 API 토큰 만료) */
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, @RequestParam(value = "redirectHome", required = false) String redirectHome) {
         String accessToken = (String) session.getAttribute("access_token");
         if (accessToken != null) {
             try {
@@ -120,12 +120,17 @@ public class AuthController {
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.exchange(logoutUrl, HttpMethod.POST, request, String.class);
             } catch (Exception e) {
-                // 로그아웃 실패해도 세션만 무효화
+                // 무시
             }
         }
-        session.invalidate(); // 세션 무효화
-        return "redirect:/login";
+        session.invalidate();
+        if ("true".equals(redirectHome)) {
+            return "redirect:/home";
+        } else {
+            return "redirect:/login";
+        }
     }
+
 
     @GetMapping("/account")
     public String accountPage(HttpSession session, Model model) {

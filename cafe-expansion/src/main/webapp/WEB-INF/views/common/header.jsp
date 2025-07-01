@@ -57,7 +57,17 @@
               <a href="${pageContext.request.contextPath}/account" class="user-nickname-btn" style="display:block;text-align:center;font-weight:bold;">
                 ${user.nickname} <span style="font-size:0.95em;color:#888;">회원정보</span>
               </a>
-              <a href="${pageContext.request.contextPath}/logout" class="logout-btn">로그아웃</a>
+              <a href="#" class="logout-btn" onclick="showLogoutConfirm(event)">로그아웃</a>
+            </div>
+            <!-- 로그아웃 확인 팝업 -->
+            <div id="logout-modal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.18); z-index:9999;">
+              <div style="background:#fff; border-radius:12px; max-width:320px; margin:120px auto 0; padding:32px 20px 18px; box-shadow:0 2px 10px rgba(0,0,0,0.07); text-align:center;">
+                <div style="font-size:1.1em; margin-bottom:24px;">카카오페이지에서 로그아웃 하시겠습니까?</div>
+                <div style="display:flex; gap:16px; justify-content:center;">
+                  <button onclick="hideLogoutConfirm()" style="background:none; border:none; color:#888; font-size:1em; padding:8px 18px; border-radius:6px;">취소</button>
+                  <button onclick="doLogout()" style="background:#191919; color:#fff; border:none; font-size:1em; padding:8px 18px; border-radius:6px;">로그아웃</button>
+                </div>
+              </div>
             </div>
             <script>
               function toggleInfo1Popup(e) {
@@ -71,6 +81,16 @@
                   if(info1) info1.style.display = 'none';
                 }
               });
+              function showLogoutConfirm(e) {
+                e.preventDefault();
+                document.getElementById('logout-modal').style.display = 'block';
+              }
+              function hideLogoutConfirm() {
+                document.getElementById('logout-modal').style.display = 'none';
+              }
+              function doLogout() {
+                window.location.href = '${pageContext.request.contextPath}/logout?redirectHome=true';
+              }
             </script>
           </c:when>
           <c:otherwise>
