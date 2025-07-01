@@ -11,7 +11,8 @@
     Kakao.init('a43481684e7ca266c31cb57d5ffed16f');
     function kakaoLogin() {
       Kakao.Auth.authorize({
-        redirectUri: 'http://localhost:8080/cafe-expansion/kakao-callback'
+        redirectUri: 'http://localhost:8080/cafe-expansion/kakao-callback',
+        prompt: 'login'  // 항상 로그인/동의 화면을 띄움
       });
     }
   </script>
