@@ -11,7 +11,7 @@
 - 기능4 : 에피소드를 통한 뷰어 기능
 
 ## 기존 카카오웹페이지 와 cafe-expansion clone 프로젝트 비교 예시
-![image](https://github.com/user-attachments/assets/9aa5d6e0-623b-4598-ba86-8741ede90fae)
+- 추후 게시
 
 # 추후 추가 기능 업데이트 예정
   0722 기능 업데이트
