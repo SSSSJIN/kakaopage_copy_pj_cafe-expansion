@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kakaopage.expansion.mapper.EventSliderMapper">
+
+    <!-- 예시: 슬라이더 리스트 전체 불러오기 -->
+    <select id="selectAllEventSliders" resultType="com.kakaopage.expansion.domain.EventSlider">
+        SELECT *
+        FROM event_slider
+    </select>
+
+    <!-- 예시: 특정 ID로 슬라이더 조회 -->
+    <select id="selectEventSliderById" parameterType="int" resultType="com.kakaopage.expansion.domain.EventSlider">
+        SELECT *
+        FROM event_slider
+        WHERE id = #{id}
+    </select>
+
+    <!-- 예시: 슬라이더 추가 -->
+    <insert id="insertEventSlider" parameterType="com.kakaopage.expansion.domain.EventSlider">
+        INSERT INTO event_slider (title, image_url, link_url, sort_order, is_active)
+        VALUES (#{title}, #{imageUrl}, #{linkUrl}, #{sortOrder}, #{isActive})
+    </insert>
+
+    <!-- 예시: 슬라이더 수정 -->
+    <update id="updateEventSlider" parameterType="com.kakaopage.expansion.domain.EventSlider">
+        UPDATE event_slider
+        SET title = #{title},
+            image_url = #{imageUrl},
+            link_url = #{linkUrl},
+            sort_order = #{sortOrder},
+            is_active = #{isActive}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 예시: 슬라이더 삭제 -->
+    <delete id="deleteEventSlider" parameterType="int">
+        DELETE FROM event_slider
+        WHERE id = #{id}
+    </delete>
+    
+    <select id="findAll" resultType="com.kakaopage.expansion.domain.EventSlider">
+    	SELECT * FROM event_slider
+	</select>    
+
+</mapper>

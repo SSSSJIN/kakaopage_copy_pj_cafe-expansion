@@ -29,5 +29,25 @@
   <update id="withdrawal" parameterType="com.kakaopage.expansion.vo.UserVO">
     UPDATE USERS SET STATUS = 'WITHDRAWN' WHERE KAKAO_ID = #{kakaoId}
   </update>
+  
+  <select id="findManagers" resultType="com.kakaopage.expansion.domain.User">
+  	SELECT * FROM USERS WHERE ROLE LIKE '%ROLE_MANAGER%'
+  </select>
+  <select id="findAll" resultType="com.kakaopage.expansion.domain.User">
+  	SELECT * FROM USERS
+  </select>
+  <update id="promoteToManager" parameterType="long">
+	  UPDATE USERS SET ROLE = 
+	    CASE
+	      WHEN ROLE IS NULL OR ROLE = '' THEN 'ROLE_MANAGER'
+	      WHEN ROLE LIKE '%ROLE_MANAGER%' THEN ROLE
+	      ELSE concat(ROLE, ',ROLE_MANAGER') 
+	    END
+	  WHERE ID = #{userId}
+  </update>
+  <update id="demoteManager" parameterType="long">
+	  UPDATE USERS SET ROLE = REPLACE(ROLE, ',ROLE_MANAGER', '')
+	  WHERE ID = #{userId}
+  </update>  
 
 </mapper>

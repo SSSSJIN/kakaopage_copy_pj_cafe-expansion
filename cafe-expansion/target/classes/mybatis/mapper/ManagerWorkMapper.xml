@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakaopage.expansion.dao.ManagerWorkMapper">
+
+  <insert id="assignWork">
+    INSERT INTO MANAGER_WORKS (MANAGER_ID, BOOK_ID) VALUES (#{managerId}, #{bookId})
+  </insert>
+
+  <delete id="removeWork">
+    DELETE FROM MANAGER_WORKS WHERE MANAGER_ID = #{managerId} AND BOOK_ID = #{bookId}
+  </delete>
+
+  <delete id="removeAllWorks">
+    DELETE FROM MANAGER_WORKS WHERE MANAGER_ID = #{managerId}
+  </delete>
+
+  <select id="findBookIdsByManager" resultType="long">
+    SELECT BOOK_ID FROM MANAGER_WORKS WHERE MANAGER_ID = #{managerId}
+  </select>
+
+  <select id="findManagerIdsByBook" resultType="long">
+    SELECT MANAGER_ID FROM MANAGER_WORKS WHERE BOOK_ID = #{bookId}
+  </select>
+</mapper>

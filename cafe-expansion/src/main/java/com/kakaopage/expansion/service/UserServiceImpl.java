@@ -1,10 +1,13 @@
 package com.kakaopage.expansion.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kakaopage.expansion.dao.UserMapper;
+import com.kakaopage.expansion.domain.User;
 import com.kakaopage.expansion.vo.UserVO;
 
 @Service
@@ -43,5 +46,25 @@ public class UserServiceImpl implements UserService {
 
         // 회원 DB에서 삭제 또는 status를 'WITHDRAWN' 등으로 변경
         mapper.withdrawal(user);
+    }
+    
+    @Override
+    public List<User> findManagers() {
+        return mapper.findManagers();
+    }
+
+    @Override
+    public List<User> findAll() {
+        return mapper.findAll();
+    }
+
+    @Override
+    public void promoteToManager(Long userId) {
+        mapper.promoteToManager(userId);
+    }
+
+    @Override
+    public void demoteManager(Long userId) {
+        mapper.demoteManager(userId);
     }
 }

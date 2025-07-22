@@ -176,3 +176,38 @@ body {
     .link:hover {
       text-decoration: underline;
     }
+    
+    .event-slider-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 40px auto 32px auto;
+      max-width: 900px;
+    }
+    .event-slider {
+      display: flex;
+      overflow: hidden;
+      width: 600px;
+      gap: 16px;
+      transition: transform 0.5s;
+    }
+    .slide img {
+      width: 180px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .slider-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .slider-btn img {
+      width: 32px;
+      height: 32px;
+    }  

@@ -1,17 +1,16 @@
 package com.kakaopage.expansion.controller;
 
 import com.kakaopage.expansion.service.BookService;
+import com.kakaopage.expansion.service.EventSliderService; // [변경] 이벤트 슬라이더 서비스 추가
+import com.kakaopage.expansion.domain.EventSlider;          // [변경] 이벤트 슬라이더 도메인 추가
 import com.kakaopage.expansion.vo.BookVO;
 import com.kakaopage.expansion.vo.UserVO;
 
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +18,12 @@ import java.util.List;
 public class HomeController {
 
     private final BookService bookService;
+    private final EventSliderService eventSliderService; // [변경] 이벤트 슬라이더 서비스 필드 추가
 
     @Autowired
-    public HomeController(BookService bookService) {
+    public HomeController(BookService bookService, EventSliderService eventSliderService) { // [변경] 생성자에 추가
         this.bookService = bookService;
+        this.eventSliderService = eventSliderService;
     }
 
     @GetMapping({"/", "/home"})
@@ -33,25 +34,28 @@ public class HomeController {
         model.addAttribute("hotBooks", hotBooks);
         model.addAttribute("rankingBooks", rankingBooks);
 
+        // [변경] 이벤트 슬라이더용 데이터 추가
+        List<EventSlider> eventSliders = eventSliderService.findAll(); 
+        model.addAttribute("eventSliders", eventSliders);
+
         // 로그인한 유저만 최근 본 목록 조회
         UserVO user = (UserVO) session.getAttribute("user");
         if (user != null) {
             List<BookVO> recentBooks = bookService.getRecentBooks(user.getId());
             model.addAttribute("recentBooks", recentBooks);
         } else {
-            model.addAttribute("recentBooks", new ArrayList<BookVO>()); // 빈 리스트 또는 null
+            model.addAttribute("recentBooks", new ArrayList<BookVO>());
         }
+
         return "home";
     }
-
-
 
     /**
      * 보관함 페이지 이동
      */
     @GetMapping("/mybooks")
     public String mybooks() {
-        return "mybooks"; // /WEB-INF/views/mybooks.jsp
+        return "mybooks";
     }
 
     /**
@@ -59,17 +63,8 @@ public class HomeController {
      */
     @GetMapping("/recent")
     public String recent() {
-        return "recent"; // /WEB-INF/views/recent.jsp
+        return "recent";
     }
 
-    /**
-     * 상세 페이지 이동 (DB 연동)
-     * bookId로 BookVO 조회해서 model에 담기
-     */
-//    @GetMapping("/detail")
-//    public String detail(@RequestParam("bookId") Long bookId, Model model) {
-//        BookVO book = bookService.getBookById(bookId);
-//        model.addAttribute("book", book);
-//        return "detail"; // /WEB-INF/views/detail.jsp
-//    }
+    // [기타 상세 페이지 이동 등 주석 처리된 기존 코드 생략]
 }

@@ -28,13 +28,15 @@ public class BookController {
     public String detail(@RequestParam("bookId") int bookId, Model model) {
         BookVO book = bookService.getBookById(bookId);
         List<EpisodeVO> episodes = episodeService.getEpisodesByBookId((long)bookId);
-        List<CommentVO> comments = commentService.getCommentsByBookId((long)bookId);
+        List commentsReply = commentService.getCommentsFromCommentReplyByBookId((long)bookId);
+        List commentsBase = commentService.getCommentsFromCommentsByBookId((long)bookId);
         int likeCount = bookLikeService.countBookLikes((long)bookId);
         Long nextEpisodeId = (episodes != null && episodes.size() > 1) ? episodes.get(1).getId() : (episodes != null && !episodes.isEmpty() ? episodes.get(0).getId() : null);
 
         model.addAttribute("book", book);
         model.addAttribute("episodes", episodes);
-        model.addAttribute("comments", comments);
+        model.addAttribute("commentsReply", commentsReply);
+        model.addAttribute("commentsBase", commentsBase);
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("nextEpisodeId", nextEpisodeId);
 
@@ -48,7 +50,7 @@ public class BookController {
         comment.setContent(content);
         comment.setWriter("익명");
         comment.setRegDate(LocalDateTime.now());
-        commentService.insertComment(comment);
+        commentService.add(comment); //insertcomment = add
         return "redirect:/detail?bookId=" + bookId;
     }
 

@@ -12,11 +12,15 @@
     <result property="regDate" column="REG_DATE"/>
   </resultMap>
 
-  <select id="getCommentsByBookId" parameterType="long" resultMap="commentResult">
-  	SELECT * FROM COMMENT_REPLY WHERE BOOK_ID = #{bookId} ORDER BY REG_DATE DESC
+  <select id="getCommentsFromCommentReplyByBookId" parameterType="long" resultMap="commentResult">
+    SELECT * FROM COMMENT_REPLY WHERE BOOK_ID = #{bookId} ORDER BY REG_DATE DESC
   </select>
 
-  <insert id="insert" parameterType="com.kakaopage.expansion.vo.CommentVO">
+  <select id="getCommentsFromCommentsByBookId" parameterType="long" resultMap="commentResult">
+    SELECT * FROM COMMENTS WHERE BOOK_ID = #{bookId}
+  </select> 
+
+  <insert id="add" parameterType="com.kakaopage.expansion.vo.CommentVO">
     INSERT INTO COMMENT_REPLY (ID, BOOK_ID, CONTENT, WRITER, REG_DATE)
     VALUES (COMMENT_SEQ.NEXTVAL, #{bookId}, #{content}, #{writer}, SYSDATE)
   </insert>
@@ -24,4 +28,9 @@
   <delete id="delete" parameterType="long">
     DELETE FROM COMMENT_REPLY WHERE ID = #{commentId}
   </delete>
+  
+  <select id="getByBoard" parameterType="long" resultMap="commentResult">
+    SELECT * FROM COMMENTS WHERE BOARD_ID = #{boardId}
+  </select>  
+  
 </mapper>

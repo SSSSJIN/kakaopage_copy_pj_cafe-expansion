@@ -1,6 +1,5 @@
 package com.kakaopage.expansion.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,15 +9,15 @@ import com.kakaopage.expansion.vo.EpisodeVO;
 
 @Service
 public class BookServiceImpl implements BookService {
-    
-	@Autowired
+
+    @Autowired
     private BookMapper bookMapper;
 
     @Override
     public BookVO getBookById(int id) {
         return bookMapper.getBookById(id);
     }
-    
+
     @Override
     public List<BookVO> getHotBooks() {
         return bookMapper.getHotBooks();
@@ -43,12 +42,19 @@ public class BookServiceImpl implements BookService {
     public int countBookLikes(int bookId) {
         return bookMapper.countBookLikes(bookId);
     }
-    
+
     @Override
     public List<BookVO> getRecentBooks(Long userId) {
-        // TODO: 실제 최근 본 책 목록을 반환하는 로직 작성
-        // 예시: return bookMapper.selectRecentBooks(userId);
-        return new ArrayList<>(); // 임시로 빈 리스트 반환
+        return bookMapper.getRecentBooks(userId);
     }
 
+    @Override
+    public List<BookVO> getAllBooks() {
+        return bookMapper.getAllBooks();
+    }
+
+    @Override
+    public int updateThumbnail(Long id, String thumbnail) {
+        return bookMapper.updateThumbnail(id, thumbnail);
+    }
 }

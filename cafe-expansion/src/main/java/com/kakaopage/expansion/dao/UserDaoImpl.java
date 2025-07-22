@@ -7,17 +7,26 @@ import org.mybatis.spring.SqlSessionTemplate;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
-  private final SqlSessionTemplate sql;
-  @Autowired
-  public UserDAOImpl(SqlSessionTemplate sql) { this.sql = sql; }
 
-  @Override
-  public void insertUser(UserVO user) {
-    sql.insert("com.kakaopage.expansion.dao.UserMapper.insertUser", user);
-  }
+    private final SqlSessionTemplate sql;
 
-  @Override
-  public UserVO selectByEmail(String email) {
-    return sql.selectOne("com.kakaopage.expansion.dao.UserMapper.selectByEmail", email);
-  }
+    @Autowired
+    public UserDAOImpl(SqlSessionTemplate sql) {
+        this.sql = sql;
+    }
+
+    @Override
+    public void insertUser(UserVO user) {
+        sql.insert("com.kakaopage.expansion.dao.UserMapper.insertUser", user);
+    }
+
+    @Override
+    public UserVO selectByEmail(String email) {
+        return sql.selectOne("com.kakaopage.expansion.dao.UserMapper.selectByEmail", email);
+    }
+
+    @Override
+    public void withdrawal(UserVO user) throws Exception {
+        sql.update("com.kakaopage.expansion.dao.UserMapper.withdrawal", user);
+    }
 }

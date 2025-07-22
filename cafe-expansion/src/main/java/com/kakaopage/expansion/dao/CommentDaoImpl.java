@@ -3,7 +3,6 @@ package com.kakaopage.expansion.dao;
 import com.kakaopage.expansion.vo.CommentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -14,6 +13,16 @@ public class CommentDaoImpl implements CommentDao {
     @Autowired
     public CommentDaoImpl(CommentMapper commentMapper) {
         this.commentMapper = commentMapper;
+    }
+
+    @Override
+    public List<CommentVO> getCommentsFromCommentReplyByBookId(long bookId) {
+        return commentMapper.getCommentsFromCommentReplyByBookId(bookId);
+    }
+
+    @Override
+    public List<CommentVO> getCommentsFromCommentsByBookId(long bookId) {
+        return commentMapper.getCommentsFromCommentsByBookId(bookId);
     }
 
     @Override
