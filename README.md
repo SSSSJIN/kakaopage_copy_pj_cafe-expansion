@@ -25,10 +25,12 @@ For copyright, license, and usage terms, please consult the respective dataset r
 - <img width="703" height="439" alt="image" src="https://github.com/user-attachments/assets/47d91d13-cb1b-454a-be03-ef140373caf2" />
 
 # 추후 추가 기능 업데이트 예정
-  0722 기능 업데이트
+
+# 0722 기능 업데이트
 - 기능1 : 관리자 페이지 create
 - 기능2 : (유저 로그인시)최근 본 목록 기능 update
-  0723 기능 업데이트
+
+# 0723 기능 업데이트
 - 기능1 : 아마존 책 이미지 사용 :
   이 프로젝트에서 사용되는 책 이미지 및 메타데이터(book30-listing-test.csv 파일 소스)는
 "amazon.books.json"
