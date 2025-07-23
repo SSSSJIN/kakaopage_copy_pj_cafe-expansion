@@ -29,7 +29,13 @@ For copyright, license, and usage terms, please consult the respective dataset r
 - 기능1 : 관리자 페이지 create
 - 기능2 : (유저 로그인시)최근 본 목록 기능 update
   0723 기능 업데이트
-- 책 이미지 교체 : 
+- 기능1 : 아마존 책 이미지 사용 :
+  이 프로젝트에서 사용되는 책 이미지 및 메타데이터(book30-listing-test.csv 파일 소스)는
+"amazon.books.json"
+(출처: dudeonthehorse/datasets)
+자료를 참고·가공하여 사용하였습니다.
+상기 데이터의 저작권 및 이용 조건 등 상세 사항은 각 데이터셋 저장소의 라이선스를 따릅니다.
+  
 ## 추가 예정 기능
 - 기능1 : 최근 본 목록 / 보관함 기능
 - 기능2 : 검색 기능
