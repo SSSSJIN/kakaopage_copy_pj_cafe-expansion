@@ -6,6 +6,7 @@ import com.kakaopage.expansion.dao.BookLikeMapper;
 
 @Service
 public class BookLikeServiceImpl implements BookLikeService {
+
     @Autowired
     private BookLikeMapper bookLikeMapper;
 
@@ -19,7 +20,7 @@ public class BookLikeServiceImpl implements BookLikeService {
         if (bookLikeMapper.existsLike(bookId, userId) == 0) {
             bookLikeMapper.insertBookLike(bookId, userId);
         }
-        // 이미 좋아요한 경우 아무 동작 안함
+        // 이미 좋아요된 경우 동작 없음
     }
 
     @Override

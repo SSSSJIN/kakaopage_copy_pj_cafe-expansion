@@ -9,7 +9,6 @@ import com.kakaopage.expansion.vo.EpisodeVO;
 
 @Service
 public class BookServiceImpl implements BookService {
-
     @Autowired
     private BookMapper bookMapper;
 

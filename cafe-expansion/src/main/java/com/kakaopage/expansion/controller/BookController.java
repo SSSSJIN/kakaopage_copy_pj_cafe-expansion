@@ -3,6 +3,10 @@ package com.kakaopage.expansion.controller;
 import com.kakaopage.expansion.vo.BookVO;
 import com.kakaopage.expansion.vo.CommentVO;
 import com.kakaopage.expansion.vo.EpisodeVO;
+import com.kakaopage.expansion.vo.UserVO;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.kakaopage.expansion.service.BookService;
 import com.kakaopage.expansion.service.CommentService;
 import com.kakaopage.expansion.service.BookLikeService;
@@ -86,5 +90,20 @@ public class BookController {
         model.addAttribute("episode", episode);
         model.addAttribute("nextEpisodeId", nextEpisodeId);
         return "viewer";
+    }
+    
+    @GetMapping("/library")
+    public String library(HttpSession session, Model model) {
+        UserVO user = (UserVO) session.getAttribute("user");
+        if (user == null) {
+            // 로그인 안 된 경우 로그인 페이지로 리다이렉트
+            return "redirect:/login";
+        }
+        // 유저가 본 책 목록 조회 (이미 recentBooks 등에서 사용한 bookService.getRecentBooks)
+        List<BookVO> bookList = bookService.getRecentBooks(user.getId());
+        model.addAttribute("bookList", bookList);
+        model.addAttribute("headerTitle", "보관함");
+        model.addAttribute("guideText", "내가 그동안 본 책 목록입니다.");
+        return "recentBooks"; // recentBooks.jsp 뷰 사용
     }
 }

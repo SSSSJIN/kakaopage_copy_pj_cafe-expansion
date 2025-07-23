@@ -211,3 +211,18 @@ body {
       width: 32px;
       height: 32px;
     }  
+
+    
+    body,
+	html,
+	.main-content,
+	.books-list,
+	.detail-container,
+	#container,
+	#content {
+	  background: #fff !important;
+	  background-color: #fff !important;
+	  color: #191919;
+	}
+	    
+	    

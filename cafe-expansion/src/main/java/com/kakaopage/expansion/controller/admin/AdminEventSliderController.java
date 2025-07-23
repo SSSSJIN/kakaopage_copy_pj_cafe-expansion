@@ -1,7 +1,6 @@
 package com.kakaopage.expansion.controller.admin;
 
 import com.kakaopage.expansion.domain.EventSlider;
-import com.kakaopage.expansion.domain.Book;
 import com.kakaopage.expansion.service.EventSliderService;
 import com.kakaopage.expansion.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
