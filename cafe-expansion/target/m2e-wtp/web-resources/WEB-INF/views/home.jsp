@@ -9,8 +9,7 @@
     <c:forEach var="book" items="${rankingBooks}">
       <div style="width:160px; text-align:center;">
         <a href="${pageContext.request.contextPath}/detail?bookId=${book.id}">
-          <img
-            src="${pageContext.request.contextPath}/resources/image/${book.imageUrl}"
+          <img src="${pageContext.request.contextPath}/resources/image/${book.image}" 
             alt="${book.title}"
             style="width:100%; border-radius:8px;"
             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/resources/image/book_default.jpg';"
@@ -26,8 +25,7 @@
     <c:forEach var="book" items="${hotBooks}">
       <div style="width:160px; text-align:center;">
         <a href="${pageContext.request.contextPath}/detail?bookId=${book.id}">
-          <img
-            src="${pageContext.request.contextPath}/resources/image/${book.imageUrl}"
+          <img src="${pageContext.request.contextPath}/resources/image/${book.image}" 
             alt="${book.title}"
             style="width:100%; border-radius:8px;"
             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/resources/image/book_default.jpg';"
@@ -44,8 +42,7 @@
       <c:forEach var="book" items="${recentBooks}">
         <div style="width:140px; text-align:center;">
           <a href="${pageContext.request.contextPath}/detail?bookId=${book.id}">
-            <img
-              src="${pageContext.request.contextPath}/resources/image/${book.imageUrl}"
+            <img src="${pageContext.request.contextPath}/resources/image/${book.image}" 
               alt="${book.title}"
               style="width:100%; border-radius:8px;"
               onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/resources/image/book_default.jpg';"

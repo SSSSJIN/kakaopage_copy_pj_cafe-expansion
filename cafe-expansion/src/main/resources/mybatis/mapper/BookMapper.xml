@@ -25,25 +25,25 @@
 
   <!-- 단일 책 조회 -->
   <select id="getBookById" parameterType="int" resultMap="bookResult">
-    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL, THUMBNAIL
+    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL AS image, THUMBNAIL
     FROM BOOKS_DEMO
     WHERE ID = #{id}
   </select>
   <!-- 지금 핫한 작품 목록 -->
   <select id="getHotBooks" resultMap="bookResult">
-    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL, THUMBNAIL
+    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL AS image, THUMBNAIL
     FROM BOOKS_DEMO
     ORDER BY ID DESC FETCH FIRST 5 ROWS ONLY
   </select>
   <!-- 실시간 랭킹 작품 목록 -->
   <select id="getRankingBooks" resultMap="bookResult">
-    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL, THUMBNAIL
+    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL AS image, THUMBNAIL
     FROM BOOKS_DEMO
     ORDER BY ID FETCH FIRST 5 ROWS ONLY
   </select>
   <!-- 제목으로 책 검색 -->
   <select id="getBooksByTitle" parameterType="string" resultMap="bookResult">
-    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL, THUMBNAIL
+    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL AS image, THUMBNAIL
     FROM BOOKS_DEMO WHERE TITLE LIKE '%' || #{title} || '%'
   </select>
   <!-- 에피소드 목록 조회 -->
@@ -57,12 +57,12 @@
   </select>
   <!-- 최근 본 작품 목록 -->
   <select id="getRecentBooks" parameterType="long" resultMap="bookResult">
-    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL, THUMBNAIL
+    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL AS image, THUMBNAIL
     FROM BOOKS_DEMO ORDER BY ID DESC FETCH FIRST 5 ROWS ONLY
   </select>
   <!-- 전체 작품 목록 -->
   <select id="getAllBooks" resultMap="bookResult">
-    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL, THUMBNAIL
+    SELECT ID, TITLE, AUTHOR, GENRE, DESCRIPTION, IMAGE_URL AS image, THUMBNAIL
     FROM BOOKS_DEMO ORDER BY ID
   </select>
   <!-- 썸네일 업데이트 -->

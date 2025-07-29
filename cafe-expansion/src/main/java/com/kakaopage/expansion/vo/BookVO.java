@@ -7,7 +7,7 @@ public class BookVO {
     private String author;
     private String genre;
     private String description;
-    private String imageUrl;  // CSV의 이미지 파일명 또는 URL 저장
+    private String image;
     private String thumbnail;
 
     // Getters and Setters
@@ -26,8 +26,8 @@ public class BookVO {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getImage() {        return image;    }
+    public void setImage(String image) {        this.image = image;    }
 
     public String getThumbnail() { return thumbnail; }
     public void setThumbnail(String thumbnail) { this.thumbnail = thumbnail; }

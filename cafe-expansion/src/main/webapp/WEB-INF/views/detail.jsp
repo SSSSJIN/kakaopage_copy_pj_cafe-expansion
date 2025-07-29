@@ -6,7 +6,7 @@
   <div class="detail-main">
     <!-- 책 표지 -->
     <div class="detail-cover">
-      <img src="${book.imageUrl}" alt="${book.title}">
+		<img src="${pageContext.request.contextPath}/resources/image/${book.image}" alt="${book.title}">
     </div>
     <!-- 책 정보 -->
     <div class="detail-info">
@@ -56,22 +56,23 @@
 
   <!-- 전체 댓글 섹션 -->
   <div class="comment-section">
-    <h3>전체 댓글</h3>
-    <form method="post" action="${pageContext.request.contextPath}/comment">
-      <input type="hidden" name="bookId" value="${book.id}">
-      <textarea name="content" rows="3" style="width:100%;" placeholder="댓글을 입력하세요"></textarea>
-      <button type="submit" style="margin-top:8px;">댓글 등록</button>
-    </form>
-    <div class="comment-list">
-      <c:forEach var="comment" items="${comments}">
-        <div class="comment-item">
-          <div class="comment-meta">${comment.nickname} | ${comment.date}</div>
-          <div class="comment-content">${comment.content}</div>
+  <h3>전체 댓글</h3>
+  <form method="post" action="${pageContext.request.contextPath}/comment">
+    <input type="hidden" name="bookId" value="${book.id}">
+    <textarea name="content" rows="3" style="width:100%;" placeholder="댓글을 입력하세요"></textarea>
+    <button type="submit" style="margin-top:8px;">댓글 등록</button>
+  </form>
+  <div class="comment-list">
+    <c:forEach var="comment" items="${comments}">
+      <div class="comment-item">
+        <div class="comment-meta">
+          ${comment.writer} | <fmt:formatDate value="${comment.regDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
         </div>
-      </c:forEach>
-    </div>
+        <div class="comment-content">${comment.content}</div>
+      </div>
+    </c:forEach>
   </div>
-</div>
+  </div>
 
 <script>
 function showTab(tab) {

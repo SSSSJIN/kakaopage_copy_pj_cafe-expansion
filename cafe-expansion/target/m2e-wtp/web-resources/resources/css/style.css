@@ -224,5 +224,24 @@ body {
 	  background-color: #fff !important;
 	  color: #191919;
 	}
+	
+	.rank-indicator {
+	  position: absolute;
+	  left: 50%;
+	  bottom: 15px;
+	  transform: translateX(-50%);
+	  font-size: 13px;
+	  background: rgba(0,0,0,0.55);
+	  color: #fff;
+	  border-radius: 11px;
+	  padding: 1px 7px;
+	  display: flex;
+	  align-items: center;
+	  gap: 5px;
+	}
+	.rank-up   { color: #ff647e; }
+	.rank-down { color: #1e90ff; }
+	.rank-same { color: #ffd400; }
+	.current-rank { font-weight: bold; margin-left: 5px; }
 	    
 	    
