@@ -37,10 +37,10 @@ For copyright, license, and usage terms, please consult the respective dataset r
 (출처: dudeonthehorse/datasets)
 자료를 참고·가공하여 사용하였습니다.
 상기 데이터의 저작권 및 이용 조건 등 상세 사항은 각 데이터셋 저장소의 라이선스를 따릅니다.
-- 기능2 : 보관함 기능 : 구현중
+- 기능2 : 보관함 기능 구현
   
 ## 추가 예정 기능
-- 기능1 : 최근 본 목록 / 보관함 기능 ( 0722 : created / 0723 : ing )
+- 기능1 : 최근 본 목록 / 보관함 기능 ( 0722 : created / 0730 : renewal )
 - 기능2 : 검색 기능
 - 기능3 : 뷰어 - 다음/이전화/목록 기능
 - 기능4 : 관리자 페이지 전용 아이디/로그인 기능 ( 07.22 : created )
