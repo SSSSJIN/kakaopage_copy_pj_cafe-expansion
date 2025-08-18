@@ -32,4 +32,9 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentVO> getByBoard(Long boardId) {
         return commentMapper.getByBoard(boardId);
     }
+
+    @Override
+    public List<CommentVO> getCommentsByEpisodeId(Long episodeId) {
+        return commentMapper.selectByEpisodeId(episodeId);
+    }
 }

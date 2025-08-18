@@ -8,4 +8,5 @@ public interface CommentService {
     List<CommentVO> getCommentsFromCommentsByBookId(Long bookId);
     void add(CommentVO comment);
     List<CommentVO> getByBoard(Long boardId);
+    List<CommentVO> getCommentsByEpisodeId(Long episodeId);
 }

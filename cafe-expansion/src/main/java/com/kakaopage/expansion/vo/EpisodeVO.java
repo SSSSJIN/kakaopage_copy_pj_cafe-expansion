@@ -1,6 +1,7 @@
 package com.kakaopage.expansion.vo;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class EpisodeVO {
 
@@ -12,6 +13,15 @@ public class EpisodeVO {
 
     // content 필드는 viewer.jsp 등에서 ${ep.content} 접근시 500에러 방지용
     private String content;
+    private Date regDateAsDate;
+
+    public Date getRegDateAsDate() {
+        return regDateAsDate;
+    }
+
+    public void setRegDateAsDate(Date regDateAsDate) {
+        this.regDateAsDate = regDateAsDate;
+    }
 
     // Getter/Setter
     public Long getId() { return id; }

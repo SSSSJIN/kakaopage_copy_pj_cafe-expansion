@@ -12,5 +12,7 @@ public interface CommentMapper {
     void add(CommentVO vo);
     void delete(@Param("commentId") Long commentId);
     List<CommentVO> getByBoard(@Param("boardId") Long boardId);
-    List<CommentVO> selectByBoardId(@Param("boardId") Long boardId);
+
+    // XML의 <select id="selectByEpisodeId">와 동일하게 추가
+    List<CommentVO> selectByEpisodeId(@Param("episodeId") Long episodeId);
 }

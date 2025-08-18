@@ -1,4 +1,4 @@
-<%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- 이전의 <style> 태그와 그 내용은 style.css 파일로 옮겨졌으므로 여기서는 제거합니다. --%>
 

@@ -1,6 +1,7 @@
 package com.kakaopage.expansion.controller;
 
 import com.kakaopage.expansion.vo.BookVO;
+
 import com.kakaopage.expansion.vo.CommentVO;
 import com.kakaopage.expansion.vo.EpisodeVO;
 import com.kakaopage.expansion.vo.UserVO;
@@ -18,7 +19,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Controller
 public class BookController {
@@ -79,33 +83,39 @@ public class BookController {
     @GetMapping("/viewer")
     public String viewer(@RequestParam("bookId") int bookId,
                          @RequestParam("episodeId") Long episodeId,
-                         Model model) {
+                         @RequestParam(value = "page", defaultValue = "0") int page,
+                         HttpSession session, Model model) {
+
         BookVO book = bookService.getBookById(bookId);
-
-        // 동기화(상세설명 참조)
-        if (book.getImage() == null && book.getImage() != null) {
-            book.setImage(book.getImage());
-        } else if (book.getImage() == null && book.getImage() != null) {
-            book.setImage(book.getImage());
-        }
-
         EpisodeVO episode = episodeService.getEpisodeById(episodeId);
-        List<EpisodeVO> episodes = bookService.getEpisodesByBookId(bookId);
 
-        Long nextEpisodeId = null;
-        for (int i = 0; i < episodes.size(); i++) {
-            if (episodes.get(i).getId().equals(episodeId) && i < episodes.size() - 1) {
-                nextEpisodeId = episodes.get(i + 1).getId();
-                break;
-            }
+        // LocalDateTime → Date 변환
+        if (episode.getRegDate() != null) {
+            Date regDateAsDate = Date.from(episode.getRegDate().atZone(ZoneId.systemDefault()).toInstant());
+            episode.setRegDateAsDate(regDateAsDate);
         }
+
+        List<String> pages = episodeService.splitContentByLength(episode.getContent(), 650);
+
+        if (page < 0) page = 0;
+        if (page >= pages.size()) page = pages.size() - 1;
 
         model.addAttribute("book", book);
         model.addAttribute("episode", episode);
-        model.addAttribute("nextEpisodeId", nextEpisodeId);
+        model.addAttribute("pages", pages);
+        model.addAttribute("pageIndex", page);
+        model.addAttribute("totalPages", pages.size());
+
+        List<CommentVO> comments = commentService.getCommentsByEpisodeId(episodeId);
+        model.addAttribute("comments", comments);
+
+        UserVO user = (UserVO) session.getAttribute("user");
+        model.addAttribute("user", user);
 
         return "viewer";
     }
+
+
 
     @GetMapping("/library")
     public String library(HttpSession session, Model model) {

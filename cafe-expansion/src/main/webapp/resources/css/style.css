@@ -244,4 +244,62 @@ body {
 	.rank-same { color: #ffd400; }
 	.current-rank { font-weight: bold; margin-left: 5px; }
 	    
-	    
+	.viewer-container {
+	  position: relative;
+	  max-width: 640px;
+	  margin: 38px auto 40px auto;
+	  background: #fff;
+	  box-shadow: 0 2px 22px rgba(0,0,0,0.10);
+	  border-radius: 18px;
+	  min-height: 560px;
+	  padding: 48px 34px 52px 38px;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: flex-start;
+	  justify-content: center;
+	}
+	
+	.viewer-main {
+	  flex: 1 1 auto;
+	  min-width: 360px;
+	  margin-top: 0;
+	}
+	
+	.episode-title {
+	  font-size: 22px;
+	  font-weight: bold;
+	  margin-bottom: 28px;
+	  text-align: left;
+	}
+	
+	.episode-content {
+	  font-size: 17px;
+	  line-height: 2.04;
+	  color: #343434;
+	  letter-spacing: 0.01em;
+	  word-break: break-all;
+	  padding-bottom: 40px;
+	}
+	
+	.nav-arrow {
+	  position: absolute;
+	  top: 38px;
+	  width: 46px;
+	  height: 46px;
+	  border-radius: 50%;
+	  background: #f6f8fa;
+	  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+	  color: #888;
+	  font-size: 30px;
+	  display: flex; align-items: center; justify-content: center;
+	  border: none; cursor: pointer; z-index: 30;
+	  transition: background 0.2s, color 0.2s;
+	}
+	.nav-arrow:disabled,
+	.nav-arrow[disabled] {
+	  opacity: 0.32;
+	  cursor: not-allowed;
+	}
+	.nav-arrow-left  { left: -60px; }
+	.nav-arrow-right { right: -60px; }
+		    

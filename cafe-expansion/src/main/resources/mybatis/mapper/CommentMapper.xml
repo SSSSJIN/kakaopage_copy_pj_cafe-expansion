@@ -33,4 +33,11 @@
     SELECT * FROM COMMENTS WHERE BOARD_ID = #{boardId}
   </select>  
   
+  <select id="selectByEpisodeId" parameterType="long" resultType="com.kakaopage.expansion.vo.CommentVO">
+	  SELECT ID, EPISODE_ID, WRITER, CONTENT, REG_DATE
+	  FROM COMMENTS
+	  WHERE EPISODE_ID = #{episodeId}
+	  ORDER BY REG_DATE DESC
+  </select>  
+  
 </mapper>

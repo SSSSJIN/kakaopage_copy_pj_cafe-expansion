@@ -1,27 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.kakaopage.expansion.dao.EpisodeMapper">
 
-  <resultMap id="episodeResult" type="com.kakaopage.expansion.vo.EpisodeVO">
-    <id property="id" column="ID"/>
-    <result property="bookId" column="BOOK_ID"/>
-    <result property="title" column="TITLE"/>
-    <result property="episodeNo" column="EPISODE_NO"/>
-    <result property="regDate" column="REG_DATE"/>
-  </resultMap>
+    <!-- CLOB → VARCHAR 변환 매핑 -->
+    <resultMap id="episodeResult" type="com.kakaopage.expansion.vo.EpisodeVO">
+        <id property="id" column="ID"/>
+        <result property="bookId" column="BOOK_ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="episodeNo" column="EPISODE_NO"/>
+        <!-- 캐스팅된 CONTENT는 이미 VARCHAR 타입이므로 jdbcType 지정 불필요 -->
+        <result property="content" column="CONTENT"/>
+        <result property="regDate" column="REG_DATE"/>
+    </resultMap>
 
-  <select id="selectByBookId" parameterType="long" resultMap="episodeResult">
-    SELECT * FROM EPISODE WHERE BOOK_ID = #{bookId} ORDER BY EPISODE_NO DESC
-  </select>
+    <!-- 에피소드 단건 조회 -->
+    <select id="selectById" parameterType="long" resultMap="episodeResult">
+        SELECT
+            ID,
+            BOOK_ID,
+            TITLE,
+            EPISODE_NO,
+            -- CLOB → VARCHAR 변환, 최대 4000자 (테스트/일반 뷰어용)
+            DBMS_LOB.SUBSTR(CONTENT, 4000, 1) AS CONTENT,
+            REG_DATE
+        FROM EPISODE
+        WHERE ID = #{id}
+    </select>
 
-  <select id="selectById" parameterType="long" resultMap="episodeResult">
-    SELECT * FROM EPISODE WHERE ID = #{id}
-  </select>
+    <!-- 책별 전체 에피소드 조회 -->
+    <select id="selectByBookId" parameterType="long" resultMap="episodeResult">
+        SELECT
+            ID,
+            BOOK_ID,
+            TITLE,
+            EPISODE_NO,
+            DBMS_LOB.SUBSTR(CONTENT, 4000, 1) AS CONTENT,
+            REG_DATE
+        FROM EPISODE
+        WHERE BOOK_ID = #{bookId}
+        ORDER BY EPISODE_NO ASC
+    </select>
 
-  <insert id="insert" parameterType="com.kakaopage.expansion.vo.EpisodeVO">
-    INSERT INTO EPISODE (ID, BOOK_ID, TITLE, EPISODE_NO, REG_DATE)
-    VALUES (EPISODE_SEQ.NEXTVAL, #{bookId}, #{title}, #{episodeNo}, SYSDATE)
-  </insert>
+    <!-- 에피소드 등록 -->
+    <insert id="insert" parameterType="com.kakaopage.expansion.vo.EpisodeVO">
+        INSERT INTO EPISODE (
+            ID,
+            BOOK_ID,
+            TITLE,
+            EPISODE_NO,
+            CONTENT,
+            REG_DATE
+        ) VALUES (
+            EPISODE_SEQ.NEXTVAL,
+            #{bookId},
+            #{title},
+            #{episodeNo},
+            #{content, jdbcType=CLOB},
+            SYSDATE
+        )
+    </insert>
+
 </mapper>
