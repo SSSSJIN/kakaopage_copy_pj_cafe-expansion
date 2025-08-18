@@ -44,6 +44,6 @@ For copyright, license, and usage terms, please consult the respective dataset r
 ## 추가 예정 기능
 - 기능1 : 최근 본 목록 / 보관함 기능 ( 0722 : created / 0730 : renewal )
 - 기능2 : 검색 기능
-- 기능3 : 뷰어 - 다음/이전화/목록 기능
+- 기능3 : 뷰어 - 다음/이전화/목록 기능 ( 0811 ~ : ing )
 - 기능4 : 관리자 페이지 전용 아이디/로그인 기능 renewal ( 07.22 : created )
 - etc.
