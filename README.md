@@ -22,7 +22,7 @@ For copyright, license, and usage terms, please consult the respective dataset r
 - 기능4 : 에피소드를 통한 뷰어 기능
 
 ## 기존 카카오웹페이지 와 cafe-expansion clone 프로젝트 비교 예시
-- <img width="703" height="439" alt="image" src="https://github.com/user-attachments/assets/47d91d13-cb1b-454a-be03-ef140373caf2" />
+- <img width="1722" height="901" alt="카카오페이지vs카피캣페이지비교이미지" src="https://github.com/user-attachments/assets/76d12bf8-dddc-4e6c-9785-6117e8a664f3" />
 
 # 추후 추가 기능 업데이트 예정
 
