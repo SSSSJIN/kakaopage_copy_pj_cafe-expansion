@@ -40,6 +40,12 @@ For copyright, license, and usage terms, please consult the respective dataset r
 
 # 0723 기능 업데이트
 - 기능1 : 보관함 기능 구현
+
+# 0730 기능 업데이트
+- 기능1 : 보관함 기능 renewal
+
+# 0811 기능 업데이트
+- 기능1 : 뷰어 = 리뉴얼 기능 중 0811 ~
   
 ## 추가 예정 기능
 - 기능1 : 최근 본 목록 / 보관함 기능 ( 0722 : created / 0730 : renewal )
