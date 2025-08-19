@@ -86,8 +86,20 @@ public class BookController {
                          @RequestParam(value = "page", defaultValue = "0") int page,
                          HttpSession session, Model model) {
 
+        // 기본 정보 조회
         BookVO book = bookService.getBookById(bookId);
         EpisodeVO episode = episodeService.getEpisodeById(episodeId);
+
+        // ★ 디버깅 로그 추가
+        System.out.println("=== VIEWER DEBUG ===");
+        System.out.println("Book ID: " + bookId);
+        System.out.println("Episode ID: " + episodeId);
+        System.out.println("Episode: " + (episode != null ? episode.getTitle() : "NULL"));
+        System.out.println("Episode Content: " + (episode != null && episode.getContent() != null ? 
+            "길이 " + episode.getContent().length() + "자" : "NULL"));
+        if (episode != null && episode.getContent() != null) {
+            System.out.println("Content 앞부분: " + episode.getContent().substring(0, Math.min(100, episode.getContent().length())));
+        }
 
         // LocalDateTime → Date 변환
         if (episode.getRegDate() != null) {
@@ -95,23 +107,66 @@ public class BookController {
             episode.setRegDateAsDate(regDateAsDate);
         }
 
-        List<String> pages = episodeService.splitContentByLength(episode.getContent(), 650);
+        // 페이지 분할
+        List<String> pages = new ArrayList<>();
+        if (episode != null && episode.getContent() != null && !episode.getContent().trim().isEmpty()) {
+            pages = episodeService.splitContentByLength(episode.getContent(), 650);
+        } else {
+            // ★ 내용이 없을 때 임시 더미 데이터
+            pages.add("새벽녘, 주인공은 폐허가 된 성채의 복도를 천천히 걸었다. 어제의 전투는 모든 것을 바꿔놓았다. 창문 너머로 들어오는 냉랭한 달빛은 이따금 피로 물든 바닥을 희미하게 비추었다. 먼지 쌓인 붉은 융단 위로 가늘게 남겨진 발자국, 그리고 검은 연기로 그을린 천장. \"여긴 정말 끝장이구나.\" 그는 조용히 중얼거렸다.");
+            pages.add("방 한쪽 구석, 깨진 갑옷 틈에서 오래된 일기장이 발견됐다. 낡은 가죽 표지에는 보풀과 피 얼룩이 잔뜩 묻어 있었다. 주인공은 일기장을 들고 팔을 들어 하늘을 가리켰다. \"언젠가 나도 이곳을 떠날 날이 오겠지.\" 손 끝에 닿는 하늘은 아직 새벽빛을 담고 있었다.");
+            pages.add("계단을 내려가던 중 한 줄기 찬바람이 머리카락을 스쳐 지나갔다. \"누구지?\" 그림자가 벽을 타고 벗어났다. 낯선 기척, 문틈 사이로 빛나는 붉은 눈동자. \"너, 여기서 무엇을 찾는 거지?\" 목소리에 담긴 경계와 불안. 하지만 주인공은 멈추지 않았다.");
+        }
+        
+        System.out.println("분할된 페이지 수: " + pages.size());
+        if (!pages.isEmpty()) {
+            System.out.println("첫 번째 페이지: " + pages.get(0).substring(0, Math.min(50, pages.get(0).length())));
+        }
 
         if (page < 0) page = 0;
         if (page >= pages.size()) page = pages.size() - 1;
 
+        // 이전화/다음화 정보
+        List<EpisodeVO> allEpisodes = episodeService.getEpisodesByBookId((long)bookId);
+        
+        Long prevEpisodeId = null;
+        Long nextEpisodeId = null;
+        int prevEpisodeLastPage = 0;
+        
+        for (int i = 0; i < allEpisodes.size(); i++) {
+            if (allEpisodes.get(i).getId().equals(episodeId)) {
+                if (i > 0) {
+                    prevEpisodeId = allEpisodes.get(i - 1).getId();
+                    EpisodeVO prevEpisode = allEpisodes.get(i - 1);
+                    List<String> prevPages = episodeService.splitContentByLength(
+                        prevEpisode.getContent() != null ? prevEpisode.getContent() : "", 650);
+                    prevEpisodeLastPage = Math.max(0, prevPages.size() - 1);
+                }
+                if (i < allEpisodes.size() - 1) {
+                    nextEpisodeId = allEpisodes.get(i + 1).getId();
+                }
+                break;
+            }
+        }
+
+        // 모델에 데이터 추가
         model.addAttribute("book", book);
         model.addAttribute("episode", episode);
         model.addAttribute("pages", pages);
         model.addAttribute("pageIndex", page);
         model.addAttribute("totalPages", pages.size());
+        model.addAttribute("prevEpisodeId", prevEpisodeId);
+        model.addAttribute("nextEpisodeId", nextEpisodeId);
+        model.addAttribute("prevEpisodeLastPage", prevEpisodeLastPage);
 
+        // 댓글 정보
         List<CommentVO> comments = commentService.getCommentsByEpisodeId(episodeId);
         model.addAttribute("comments", comments);
 
         UserVO user = (UserVO) session.getAttribute("user");
         model.addAttribute("user", user);
 
+        System.out.println("=== DEBUG END ===");
         return "viewer";
     }
 
