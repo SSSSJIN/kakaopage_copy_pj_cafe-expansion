@@ -28,6 +28,11 @@ For copyright, license, and usage terms, please consult the respective dataset r
 
 ---
 
+## 기존 카카오웹페이지 와 cafe-expansion clone 프로젝트 비교 예시
+- <img width="1722" height="901" alt="카카오페이지vs카피캣페이지비교이미지" src="https://github.com/user-attachments/assets/76d12bf8-dddc-4e6c-9785-6117e8a664f3" />
+
+---
+
 ## 🛠️ 사용 기술 (Tech Stack)
 
 | 구분 | 기술 |
@@ -40,10 +45,7 @@ For copyright, license, and usage terms, please consult the respective dataset r
 
 ---
 
-## 기존 카카오웹페이지 와 cafe-expansion clone 프로젝트 비교 예시
-- <img width="1722" height="901" alt="카카오페이지vs카피캣페이지비교이미지" src="https://github.com/user-attachments/assets/76d12bf8-dddc-4e6c-9785-6117e8a664f3" />
 
----
 
 ## 🤔 겪었던 어려움 및 해결 과정
 
