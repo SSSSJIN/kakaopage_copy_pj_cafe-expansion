@@ -9,7 +9,7 @@ Book images and metadata used in this project (see: book30-listing-test.csv) are
 by dudeonthehorse/datasets.
 For copyright, license, and usage terms, please consult the respective dataset repository.
 
-# ☕ KakaoPage 클론 코딩 프로젝트 (cafe-expansion)
+# ☕ kakao page 클론 프로젝트 (cafe-expansion)
 
 
 카카오페이지의 핵심 기능과 UI/UX를 분석하고 직접 구현해본 웹 애플리케이션 프로젝트입니다. 이 프로젝트를 통해 대규모 웹 서비스의 아키텍처를 이해하고, Java/Spring 기반의 서버 사이드 렌더링(SSR) 개발 역량을 강화하고자 했습니다.
